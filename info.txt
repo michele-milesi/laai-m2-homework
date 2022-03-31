@@ -1,0 +1,7 @@
+1) 1.4 - 1.5 => Pag. 55 of https://web.mit.edu/6.001/6.037/sicp.pdf
+2) 1.35 - 1.36 - 1.37 - 1.38 => Pag. 122-124 of https://web.mit.edu/6.001/6.037/sicp.pdf
+3) 2 - 5 - 6 - 7 => http://v1.probmods.org/generative-models.html#exercises
+4) https://virtuale.unibo.it/pluginfile.php/1169546/mod_resource/content/1/generative-models.rkt
+5) 4 => http://v1.probmods.org/conditioning.html#exercises
+6) https://virtuale.unibo.it/pluginfile.php/1176530/mod_resource/content/1/week%203.rkt
+7) https://virtuale.unibo.it/pluginfile.php/1176532/mod_resource/content/1/LAAFI_Metropolis_Hastings.pdf
