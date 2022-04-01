@@ -1,1 +1,55 @@
-\section{Exercise 2}
+\section*{Exercise 2}
+
+\subsection*{Exercise 1.35}
+Show that the golden ratio $\varphi $ is a fixed point of the transformation $ x \mapsto 1 + \frac{1}{x} $, and use this fact
+to compute $\varphi $ by means of the \texttt{fixed-point} procedure.
+
+\paragraph{Solution}
+
+
+\subsection*{Exercise 1.36}
+Modify \texttt{fixed-point} so that it prints the sequence of approximations it generates, using the \texttt{newline} and 
+\texttt{display} primitives shown in Exercise 1.22. Then find a solution to $ x^{x} = 1000 $ by finding a fixed point of
+$ x \mapsto \frac{\log(1000)}{\log(x)} $.
+(Use Scheme's primitive \texttt{log} procedure, which computes natural logarithms).
+Compare the number of steps this takes with and without average damping.
+(Note that you cannot start \texttt{fixed-point} with a guess of $ 1 $, as this would cause division by $ \log(1) = 0 $).
+
+\paragraph{Solution}
+
+
+\subsection*{Exercise 1.37}
+\begin{itemize}
+    \item[a.] An infinite \textit{continued fraction} is an expression of the form 
+        \[ f = \cfrac{N_{1}}{D_{1} + \cfrac{N_{2}}{D_{2} + \cfrac{N_{3}}{D_{3} + \dots}}} \] 
+        As an example, one can show that the infinite continued fraction expansion with the $ N_{i} $ and the $ D_{i} $
+        all equal to $ 1 $ produces $ \cfrac{1}{\varphi} $, where $ \varphi $ is the golden ratio.
+        One way to approximate an infinite continued fraction is to truncate the expansion after a given number of terms.
+        Such a truncation $ - $ a so-called \textit{k-term finite continued fraction} $ - $ has the form
+        \[ \cfrac{N_{1}}{D_{1} + \cfrac{N_{2}}{\ddots + \cfrac{N_{k}}{D_{k}}}} \]
+        Suppose that \texttt{n} and \texttt{d} are procedures of one argument (the term index $ i $) that return the $ N_{i} $
+        and $ D_{i} $ of the terms of the continued fraction.
+        Define a procedure \texttt{cont-frac} such that evaluating \texttt{(cont-frac n d k)} computes the value of the $k$-term
+        finite continued fraction. Check your procedure by approximating $ \frac{1}{\varphi} $ using
+        \begin{lstlisting}
+            (cont-frac (lambda (i) 1.0)
+                       (lambda (i) 1.0)
+                       k)
+        \end{lstlisting} 
+        for succesive values ok \texttt{k}. How large must you make \texttt{k} in order to get an approximation that is accurate
+        to 4 decimals places?
+    
+    \item[b.] If your \texttt{cont-frac} procedure generates a recursive process, write one that generates an iterative process. If
+        it generates an iterative process, write one that generates a recursive process.    
+\end{itemize}
+
+\paragraph{Solution}
+
+
+\subsection*{Exercise 1.38}
+In 1737, the Swiss mathematician Leonhard Euler published a memoir \textit{De Fractionibus Continuis}, which
+included a continued fraction expansion for $ e - 2 $, where $ e $ is the base of the natural logarithms.
+In this fraction, the $ N_{i} $ are all $ 1 $, and the $ D_{i} $ are successively $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $.
+Write a program that uses your \texttt{cont-frac} procedure from Exercise 1.37 to approximate $ e $, based on Euler's expansion.
+
+\paragraph{Solution}

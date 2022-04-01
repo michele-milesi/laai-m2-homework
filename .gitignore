@@ -1,4 +1,3 @@
-report/*
-!report/main.tex
-!report/main.pdf
-!report/exercises
+/report/*
+!/report/main.pdf
+!/report/**/*.tex
