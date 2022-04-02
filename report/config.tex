@@ -1,0 +1,37 @@
+\usepackage[english]{babel}
+
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsthm}
+
+\lstdefinelanguage{racket}{
+    alsodigit = {-},
+    alsoletter = {?, =, <, >, /},
+    morekeywords = [1]{define, lambda, and, or},
+    morekeywords = [2]{dist?, equal?, =, >, <, >=, <=}, % sum, map, mem, 
+    morekeywords = [3]{if, list, car, cdr},
+    % morekeywords = [4]{flip, geometric, bernoulli-dist, normal-dist},
+    keywordstyle = [1]\color{NavyBlue},
+    keywordstyle = [2]\color{BrickRed},
+    keywordstyle = [3]\color{ForestGreen},
+    % keywordstyle = [4]\color{Yellow},
+    morecomment = [l]{;},
+    morecomment = [s]{\#\|}{\|\#},
+    commentstyle = \color{YellowOrange},
+    morestring = [b]",
+    morestring = [s]{\'(}{)},
+    stringstyle = \textbf
+}
+\lstset{
+    language = racket % ,
+    % basicstyle=\ttfamily
+}
+
+\newtheorem*{proposition}{Proposition}

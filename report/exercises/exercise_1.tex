@@ -6,7 +6,7 @@ describe the behavior of the following procedure:
 
 \begin{lstlisting}
     (define (a-plus-abs-b a b) 
-        ((if (> b 0) + -) a b))
+      ((if (> b 0) + -) a b))
 \end{lstlisting}
 
 \paragraph{Solution}
@@ -20,9 +20,9 @@ or normal-order evaluation. He defines the following two procedures:
     (define (p) (p))
 
     (define (test x y)
-        (if (= x 0) 
-            0 
-            y))
+      (if (= x 0)
+          0
+          y))
 \end{lstlisting}
 
 Then he evaluates the expression

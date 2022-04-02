@@ -1,3 +1,5 @@
 /report/*
 !/report/main.pdf
-!/report/**/*.tex
+!/report/exercises
+!/report/main.tex
+!/report/config.tex

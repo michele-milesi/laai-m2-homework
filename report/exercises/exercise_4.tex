@@ -1,0 +1,24 @@
+\section*{Exercise 4}
+
+\subsection*{Exercise 4.1}
+What are \texttt{(bernoulli-dist p)}, \texttt{(normal-dist $\mu$ $\sigma$)} exactly? Are they real numbers 
+(produced in a random way)?
+We have seen that flip is a procudere with a probabilistic behaviour. 
+Is, e.g., \texttt{(normal-dist $\mu$ $\sigma$)} something similar?
+Try to evaluate \texttt{(normal-dist 0 1)}
+
+\paragraph{Solution}
+
+
+\subsection*{Exercise 4.2}
+Evaluate
+\begin{lstlisting}
+    (dist? (normal-dist 0 1))
+    
+    (dist? (bernoulli-dist 0.5))
+
+    (dist? flip)
+\end{lstlisting}
+What is the difference between flip and (bernoulli-dist 0.5)?
+
+\paragraph{Solution}
