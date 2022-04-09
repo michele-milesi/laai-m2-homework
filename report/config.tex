@@ -11,6 +11,8 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{amsthm}
 
+\definecolor{lgrey}{gray}{0.95}
+
 \lstdefinelanguage{racket}{
     alsodigit = {-},
     alsoletter = {?, =, <, >, /},
@@ -30,8 +32,12 @@
     stringstyle = \textbf
 }
 \lstset{
-    language = racket % ,
-    % basicstyle=\ttfamily
+    language = racket,
+    basicstyle = \sffamily\normalsize,
+    % columns=fullflexible,
+    xleftmargin = 0.5ex,
+    backgroundcolor = \color{lgrey},
+    frame = tb
 }
 
 \newtheorem*{proposition}{Proposition}
