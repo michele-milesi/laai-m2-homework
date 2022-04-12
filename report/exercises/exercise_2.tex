@@ -165,14 +165,28 @@ the approximation with average damping takes $ 13 $ steps.
 
 \paragraph{Solution}
 \begin{itemize}
-    \item[a.] The procedure \texttt{cont-frac} has been defined with a recursive process: The code is shown below:
-\begin{lstlisting}
+    \item[a.] The procedure \texttt{cont-frac} has been defined with a recursive process. The function has 3 parameters: \textit{(i)}
+        \texttt{n} which is the function that returns the element $ N_{i} $ of the continued fraction; \textit{(ii)} \texttt{d}
+        which is the function that returns the element $ D_{i} $ of the continued fraction; \textit{(iii)} \texttt{k} which is the
+        number of iterations to be performed.
+        In the body of the function is defined the local recursive procedure \texttt{cont-frac-rec} which is responsable for
+        computing recursivly the continued fraction. It has two formal parameters: \texttt{k} and \texttt{counter} which is the 
+        counter of the performed iterations; when the \texttt{counter} reaches \texttt{k} (i.e. the number of iterations to be
+        performed) the base case is reached and the returned value is computed.
+        The procedure \texttt{cont-frac} calls the procedure \texttt{cont-frac-rec} with initial parameters \texttt{k} and $ 0 $,
+        in this way we are sure that the number of iterations performed will be k (with \texttt{counter} from $1$ to \texttt{k}).
+        The code is shown below:
+\begin{lstlisting}[caption={Recursive procedure \texttt{cont-frac}},captionpos=b]
 (define (cont-frac n d k)
-  (if (= k 1)
-      (/ (n k) (d k))
-      (/ (n k) (+ (d k) (cont-frac n d (- k 1))))))
+  (define (cont-frac-rec k counter) 
+    (if (= counter k)
+        (/ (n counter) (d counter))
+        (/ (n counter)
+           (+ (d counter) 
+              (cont-frac-rec k (+ counter 1))))))
+  (cont-frac-rec k 1))
 \end{lstlisting}
-        Then it has been tested by approximating $ \frac{1}{\varphi} \sim 0.6180 $. When $ k = 11 $ or grater, the approximation is
+        Then it has been tested by approximating $ 1 / \varphi \sim 0.6180 $. When $ k = 11 $ or grater, the approximation is
         accurate to 4 decimals places.
     \item[b.] Since before the procedure generates a recursive process, it has been rewritten in order to generate an iterative
         process.

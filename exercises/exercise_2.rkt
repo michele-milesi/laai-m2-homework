@@ -59,31 +59,44 @@
 
 ; cont-frac recursive process
 (define (cont-frac n d k)
-  (if (= k 1)
-      (/ (n (- number-of-iterations k)) (d (- number-of-iterations k)))
-      (/ (n (- number-of-iterations k)) (+ (d (- number-of-iterations k)) (cont-frac n d (- k 1))))))
+  (define (cont-frac-rec k counter) 
+    (if (= counter k)
+        (/ (n counter) (d counter))
+        (/ (n counter)
+           (+ (d counter) 
+              (cont-frac-rec k (+ counter 1))))))
+  (cont-frac-rec k 1))
 
 (cont-frac (lambda (i) 1.0)
            (lambda (i) 1.0)
            number-of-iterations)
 
 ; cont-frac iterative process
-(define (cont-frac-iter n d k res)
-  (if (= k 0)
-      (/ (n k) res)
-      (cont-frac-iter n 
-                      d 
-                      (- k 1) 
-                      (+ (d (- k 1)) 
-                         (/ (n k) res)))))
+(define (cont-frac-iter n d k)
+  (define (iter k res)
+    (if (= k 1)
+        (/ (n k) res)
+        (iter (- k 1)
+              (+ (d (- k 1))
+                 (/ (n k) res)))))
+  (iter k (d k)))
 
 
 ; exercise 1.38
 (define (get-n i) 1)
 (define (get-d i)
-  (if (= (modulo (- i 1) 3) 0)
-      (* (+ (quotient (- i 1) 3) 1) 2)
-      (if (< i 2) (+ i 1) 1)))
+  (if (= (modulo (- i 2) 3) 0)
+      (* (+ (quotient
+             (- i 2)
+             3)
+            1)
+         2)
+      (if (<= i 2) i 1)))
 
-(cont-frac get-n get-d number-of-iterations)
-(cont-frac-iter get-n get-d number-of-iterations (get-d number-of-iterations))
+(define (euler-number k)
+  (+ (cont-frac get-n get-d k) 2))
+(define (euler-number-iter k)
+  (+ (cont-frac-iter get-n get-d k) 2))
+
+(euler-number number-of-iterations)
+(euler-number-iter number-of-iterations)
