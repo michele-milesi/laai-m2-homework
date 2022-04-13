@@ -189,16 +189,23 @@ the approximation with average damping takes $ 13 $ steps.
         Then it has been tested by approximating $ 1 / \varphi \sim 0.6180 $. When $ k = 11 $ or grater, the approximation is
         accurate to 4 decimals places.
     \item[b.] Since before the procedure generates a recursive process, it has been rewritten in order to generate an iterative
-        process.
+        process. The procedure defines the local procedure \texttt{iter} which takes in input the number of iterations to 
+        be performed (\texttt{k}) and partial result computed so far. The idea is to begin from the last fraction (i.e. 
+        $ N_{k} / D_{k} $) and then proceding backward to compute all the other fractions. In particular, the idea is to compute
+        the quantity $ D_{i - 1} + \frac{N_{i}}{Q_{i}} $ where $ Q_{i} $ is the quantity computed so far.
+        Indeed, the procedure \texttt{iter} is called with initial parameters \texttt{k} and $ Q_{k} = D_{k} $, after the first 
+        iteration, the computed value $ Q_{k - 1} = D_{k - 1} + \frac{N_{k}}{D_{k}} $.
+        In the last step (i.e. $ k = 1 $) the procedure returns the ration $ N_{1} / Q_{1} $ that is exaclty the continued fraction
+        to be computed.
 \begin{lstlisting}
-(define (cont-frac-iter n d k res)
-  (if (= k 0)
-      (/ (n k) res)
-      (cont-frac-iter n 
-                      d 
-                      (- k 1) 
-                      (+ (d (- k 1)) 
-                         (/ (n k) res)))))
+(define (cont-frac-iter n d k)
+  (define (iter k res)
+    (if (= k 1)
+        (/ (n k) res)
+        (iter (- k 1)
+              (+ (d (- k 1))
+                 (/ (n k) res)))))
+  (iter k (d k)))
 \end{lstlisting}   
 \end{itemize}
 
@@ -209,4 +216,41 @@ included a continued fraction expansion for $ e - 2 $, where $ e $ is the base o
 In this fraction, the $ N_{i} $ are all $ 1 $, and the $ D_{i} $ are successively $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $.
 Write a program that uses your \texttt{cont-frac} procedure from Exercise 1.37 to approximate $ e $, based on Euler's expansion.
 
-\paragraph{Solution}
+\paragraph{Solution} The two procedures \texttt{cont-frac} \texttt{cont-frac-iter} were be used to approximate $ e $ in order to
+verify that the results matched. The procedure \texttt{euler-number} uses the procedure \texttt{cont-frac} (which generates a 
+recursive process), while, the procedure \texttt{euler-number-iter} uses the procedure \texttt{cont-frac-iter}.
+To get the values of $ N_{k} $ and $ D_{k} $, two procedures have been defined: \texttt{get-n} and \texttt{get-d}. The first one
+is trivial and returns $ 1 $ at each iteration step, while the latter is more complex.
+To get the element of the sequence $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $ it is possible to use the function
+$ seq: \mathbb{N}^{+} \to \mathbb{N}^{+} $ described below:
+\[     
+  seq(i) = 
+  \begin{cases}
+      i & \text{if } 1 \leq i \leq 2 \\
+      \left(\frac{i - 2}{3} + 1 \right) \cdot 2  & \text{if } i - 2\;mod\;3 = 0\\
+      1 & \text{otherwise}
+  \end{cases} 
+\]
+So we defined the procedures \texttt{get-n} and \texttt{get-d} as follows:
+\begin{lstlisting}[caption={Definition of the procedures \texttt{get-n} and \texttt{get-d}}, captionpos=b]
+(define (get-n i) 1)
+(define (get-d i)
+  (if (= (modulo (- i 2) 3) 0)
+      (* (+ (quotient
+             (- i 2)
+             3)
+            1)
+         2)
+      (if (<= i 2) i 1)))
+\end{lstlisting}
+Since the sequence of $ D_{i} $ is used to approximate $ e - 2 $, we can approximate $ e $ by approximating $ e - 2 $ and than
+by adding $ 2 $ to the computed quantity. This is the way the procedures \texttt{euler-number} and \texttt{euler-number-iter}
+approximate $ e $.
+\begin{lstlisting}
+(define (euler-number k)
+  (+ (cont-frac get-n get-d k) 2))
+
+(define (euler-number-iter k)
+  (+ (cont-frac-iter get-n get-d k) 2))
+\end{lstlisting}
+Both the procedures return the value $ 23225 / 8544 \sim 2.7182 \approx e $.
