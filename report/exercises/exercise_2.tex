@@ -55,8 +55,8 @@ $ x \mapsto \frac{\log(1000)}{\log(x)} $.
 Compare the number of steps this takes with and without average damping.
 (Note that you cannot start \texttt{fixed-point} with a guess of $ 1 $, as this would cause division by $ \log(1) = 0 $).
 
-\paragraph{Solution} First of all the procedure \texttt{fixed-point} has been modified in order to print the sequence of 
-approximations it generates.
+\paragraph{Solution} 
+First of all the procedure \texttt{fixed-point} has been modified in order to print the sequence of approximations it generates.
 \begin{lstlisting}[caption={Procedure \texttt{fixed-point} which prints the sequence of approximations it generates},captionpos=b]
 (define (fixed-point-print-seq f first-guess)
   (define (close-enough? v1 v2)
@@ -83,7 +83,7 @@ Then the transformation $ x \mapsto \frac{\log(1000)}{\log(x)} $ has been define
   (/ (+ x y) 2))
 
 ; definition of transformation x -> log(1000) / log(x) 
-;with average damping
+; with average damping
 (define (log-transformation-avg-dmp)
   (fixed-point-print-seq
    (lambda (x)
@@ -216,9 +216,10 @@ included a continued fraction expansion for $ e - 2 $, where $ e $ is the base o
 In this fraction, the $ N_{i} $ are all $ 1 $, and the $ D_{i} $ are successively $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $.
 Write a program that uses your \texttt{cont-frac} procedure from Exercise 1.37 to approximate $ e $, based on Euler's expansion.
 
-\paragraph{Solution} The two procedures \texttt{cont-frac} \texttt{cont-frac-iter} were be used to approximate $ e $ in order to
-verify that the results matched. The procedure \texttt{euler-number} uses the procedure \texttt{cont-frac} (which generates a 
-recursive process), while, the procedure \texttt{euler-number-iter} uses the procedure \texttt{cont-frac-iter}.
+\paragraph{Solution} 
+The two procedures \texttt{cont-frac} and \texttt{cont-frac-iter} were be used to approximate $ e $ in order to verify that the 
+results matched. The procedure \texttt{euler-number} uses the procedure \texttt{cont-frac} (which generates a recursive process), 
+while the procedure \texttt{euler-number-iter} uses the procedure \texttt{cont-frac-iter}.
 To get the values of $ N_{k} $ and $ D_{k} $, two procedures have been defined: \texttt{get-n} and \texttt{get-d}. The first one
 is trivial and returns $ 1 $ at each iteration step, while the latter is more complex.
 To get the element of the sequence $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $ it is possible to use the function

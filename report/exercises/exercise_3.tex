@@ -4,16 +4,25 @@
 Explain why (in terms of the evaluation process) these two programs give different answers 
 (i.e. have different distributions on return values):
 \begin{lstlisting}
-    (define foo (flip))
-    (list foo foo foo)
+(define foo (flip))
+(list foo foo foo)
 \end{lstlisting}
 
 \begin{lstlisting}
-    (define (foo) (flip))
-    (list (foo) (foo) (foo))
+(define (foo) (flip))
+(list (foo) (foo) (foo))
 \end{lstlisting}    
 
-\paragraph{Solution}
+\paragraph{Solution} 
+In the first program we are defining \texttt{foo} as a variable and we are assigning it the value of the evaluation of the 
+expression \texttt{(flip)}, indeed, the value of \texttt{foo} is either \texttt{\#t} or \texttt{\#f}.
+After that we create a list which contains three time the value of \texttt{foo}, so if \texttt{foo} has value \texttt{\#t}, then
+we are defining a the list: \texttt{'(\#t \#t \#t)}; otherwise we are creating the list: \texttt{'(\#f \#f \#f)}.
+
+In the second program, we are defining a new procedure \texttt{foo} which is a wrapper for the procedure \texttt{flip}. This means
+that each time the procedure \texttt{foo} is called, also the procedure \texttt{flip} is called.
+For this reason, when we define the list, the expression \texttt{flip} is evaluated three times and, since it is a non-deterministic 
+procedure, the three elements of the list can be different.
 
 
 \subsection*{Exercise 3.5}
@@ -22,31 +31,30 @@ distribution, strength is either 5 or 10 with equal probability. Also the probab
 Here are four expressions you could evaluate using this modified model:
 
 \begin{lstlisting}
-    (define strength (mem (lambda (person) (if (flip) 5 10))))
-    (define lazy (lambda (person) (flip (/ 1 3))))
-
-    (define (total-pulling team)
-      (sum
-       (map (lambda (person)
-              (if (lazy person)
-                  (/ (strength person) 2) 
-                  (strength person)))
-            team)))
-
-    (define (winner team1 team2) 
-      (if (< (total-pulling team1) (total-pulling team2)) 
-          team2 
-          team1))
-
-    (winner '(alice) '(bob))                        ;; expression 1
-
-    (equal? '(alice) (winner '(alice) '(bob)))      ;; expression 2
-
-    (and (equal? '(alice) (winner '(alice) '(bob))) ;; expression 3
-         (equal? '(alice) (winner '(alice) '(fred))))
-
-    (and (equal? '(alice) (winner '(alice) '(bob))) ;; expression 4
-         (equal? '(jane) (winner '(jane) '(fred))))
+(define strength (mem (lambda (person) (if (flip) 5 10))))
+(define lazy (lambda (person) (flip (/ 1 3))))
+    
+(define (total-pulling team)
+  (sum
+   (map (lambda (person) (if (lazy person)
+                             (/ (strength person) 2)
+                             (strength person)))
+        team)))
+    
+(define (winner team1 team2)
+  (if (< (total-pulling team1) (total-pulling team2))
+      team2
+      team1))
+    
+(winner '(alice) '(bob))                        ;; expression 1
+    
+(equal? '(alice) (winner '(alice) '(bob)))      ;; expression 2
+    
+(and (equal? '(alice) (winner '(alice) '(bob))) ;; expression 3
+     (equal? '(alice) (winner '(alice) '(fred))))
+    
+(and (equal? '(alice) (winner '(alice) '(bob))) ;; expression 4
+     (equal? '(jane) (winner '(jane) '(fred))))
 \end{lstlisting}
 
 \begin{itemize}
@@ -57,24 +65,87 @@ Here are four expressions you could evaluate using this modified model:
 \end{itemize}
 
 \paragraph{Solution}
-
+\begin{itemize}
+    \item[a.] 
+    \item[b.]
+    \item[c.]  
+\end{itemize}
 
 \subsection*{Exercise 3.6}
 Use the rules of probability, described above, to compute the probability that the geometric distribution 
 defined by the following stochastic recursion returns the number 5.
 
 \begin{lstlisting}
-    (define (geometric p)
-      (if (flip p)
-          0
-          (+ 1 (geometric p))))
+(define (geometric p)
+  (if (flip p)
+      0
+      (+ 1 (geometric p))))
 \end{lstlisting}
 
 \paragraph{Solution}
+The procedure computes the number of consecutive \textit{false} (\texttt{\#f}) results. Since each coin toss (i.e. \texttt{flip}) is 
+independent, the probability of getting five consecutive \textit{false} results (and the sixth one \textit{true}) is given by:
+\[ P(geometric = 5) = (1 - p)^{5} \cdot p \]
+The formula comes from the fact that the probability of getting a \textit{true} value from the procedure \texttt{flip} is given by
+$p$, so the probability of getting a \textit{false} value from \texttt{flip} is $ (1 - p) $.
+So the procedure \texttt{geometric} computes the number of trials needed to get the first occurence of success (i.e. \texttt{\#t}).
+Each trial has the same probability of success $p$.
+For this reason the computed probability is equivalent to the geometric distribution with success probability $p$ and with the 
+first occurence of success at the sixth trial.
+
+To check the formula, some samples have been generated in order to approximate the probability to get five consecutive 
+\textit{false} results. The experiment consists of generating $ 100000 $ samples with probability 
+$ P(true) = P(false) = 0.5 $.
+The following procedures are defined in order to implement the experiment: \textit{(i)} \texttt{model} is a wrapper for the 
+procedure \texttt{geometric}; \textit{(ii)} \texttt{count-5} takes in input the list of samples and returns the number of
+occurences which have value $ 5 $.
+Then the samples are generated and the statistics are computed.
+\begin{lstlisting}[caption={Experiment to approximate the probability of getting the first occurence of success at the sixth trial},
+    captionpos=b]
+; number of samples we want to generate
+(define n-samples 100000)
+
+; model used to generate the samples
+(define (model)
+  (define p 0.5)
+  (geometric p))
+
+; procedure which counts the number of samples with value 5
+(define (count-5 l)
+  (if (null? l)
+      0
+      (if (= (car l) 5)
+          (+ 1 (count-5 (cdr l)))
+          (count-5 (cdr l)))))
+
+; sampling
+(define experiment (repeat model n-samples))
+
+; ratio between the number of samples with value 5
+; and the total number of samples
+(/ (count-5 experiment) n-samples)
+
+; histogram of the results
+(hist experiment)
+\end{lstlisting}
+The probability computed by hand is $ P(geometric = 5) = 0.5^{5} \cdot 0.5 = 0.5^{6} = 0.015625 $, while the probability computed
+by the program is $ P_{program}(geometric) = 1569/100000 = 0.01569 $.
+The two probabilities are very similar, so we can conclude that the calculation of the probability is correct.
+The histogram of the generated samples is shown in Figure~\ref{fig:3-5}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{images/3.5.png}
+    \caption{
+        Histogram of geometric experiment: the \textit{x-axis} represents the values generated during the sampling phase; 
+        the \textit{y-axis} represents the number of samples which have a specific value.
+    }
+    \label{fig:3-5}
+\end{figure}
 
 
 \subsection*{Exercise 3.7}
-Convert the following probability table to a compact Church program:
+Convert Table~\ref{tab:es3-7} to a compact Racket program.
 \begin{table}[h]
     \begin{center}
         \begin{tabular}{ccc}
@@ -88,16 +159,52 @@ Convert the following probability table to a compact Church program:
             \hline
         \end{tabular}
     \end{center}
-    
+    \caption{Probabilities to be computed with a Racket program}
+    \label{tab:es3-7}
 \end{table}
 
-Hint: fix the probability of A and then define the probability of B to depend on whether A is true or not. 
+\noindent Hint: fix the probability of A and then define the probability of B to depend on whether A is true or not. 
 Run your Church program and build a histogram to check that you get the correct distribution.
 
 \begin{lstlisting}
-    (define a ...)
-    (define b ...)
-    (list a b)
+(define a ...)
+(define b ...)
+(list a b)
 \end{lstlisting}
 
 \paragraph{Solution}
+The \texttt{a-b-model} has been defined as follows:
+\begin{lstlisting}[caption={Model to compute the probabilities of A and B}, captionpos=b]
+(define (a-b-model)
+  (define a
+    (flip 0.8))
+  (define b
+    (if a
+        (flip 0.5)
+        (flip 0.3)))
+  (list a b))
+\end{lstlisting}
+The model does not contain the \texttt{rejection-sampler} because we do not need to compute a conditional probability.
+The \texttt{a-b-model} defines first the variable \texttt{a} which has probability $0.8$ to be \textit{true}:
+this probability can be computed by adding the last two rows of the Table~\ref{tab:es3-7}, indeed, the value of \texttt{A} in
+the first two rows is \textit{false}, while in the last two is \textit{true}.
+Then the probability of the variable \texttt{b} depends on the value of the variable \texttt{a}, indeed, if \texttt{A} is 
+\textit{false}, then the probability that \texttt{B} is \textit{true} $ \frac{0.06}{0.06 + 0.14} = 0.3 $; while if
+\texttt{A} is \textit{true}, then la probability that \texttt{B} is true is $ 0.5 $.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{images/3.7.png}
+    \caption{
+        Histogram of A-B experiment: the \textit{x-axis} represents the values generated during the sampling phase; 
+        the \textit{y-axis} represents the number of samples which have a specific value.
+    }
+    \label{fig:3-7}
+\end{figure}
+
+The experiment consists of generating $100000$ samples, the histogram of generated samples is shown in Figure~\ref{fig:3-7}.
+It is possible to observe that the samples are distributed as the probability distribution defined in Table~\ref{tab:es3-7},
+indeed, the number of samples with value false both for the variable \texttt{A} and \texttt{B} is about $14000$; the number of
+samples with \texttt{A} \textit{true} is about $6000$ and the number of samples with value \textit{(true, false)} and 
+\textit{(true, true)} is about $40000$ each. 
+The number of samples is not exact because we are approximating the probability distribution by sampling.
