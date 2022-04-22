@@ -3,22 +3,64 @@
 \subsection*{Exercise 4.1}
 What are \texttt{(bernoulli-dist p)}, \texttt{(normal-dist $\mu$ $\sigma$)} exactly? Are they real numbers 
 (produced in a random way)?
-We have seen that flip is a procudere with a probabilistic behaviour. 
+We have seen that \texttt{flip} is a procedure with a probabilistic behaviour. 
 Is, e.g., \texttt{(normal-dist $\mu$ $\sigma$)} something similar?
 Try to evaluate \texttt{(normal-dist 0 1)}
 
 \paragraph{Solution}
+\texttt{(bernoulli-dist p)} and \texttt{(normal-dist $\mu$ $\sigma$)} are two structures which represent 
+two different distribution, the first one represents the \textit{bernoulli} distribution with success probability $p$; 
+instead, the latter object represents the \textit{normal} distribution with parameters $\mu$ and $\sigma$ as mean and variance.
+They are not real numbers, they are structures which can be used to generate numbers according to the distribution they represent.
+To generate a sample from a distribution object it necessary to use the procedure \texttt{sample} which takes as argument a 
+distribution object and returns the generated value.
+
+The procedure \texttt{flip} has a probabilistic behaviour, but it is different from the call \texttt{(normal-dist 0 1)}, indeed, the 
+first one is a procedure which returns the value \texttt{\#t} with probability $0.5$, while the second one is a structure, so the 
+evaluation is different. Since it is a structure, so when the call is done, the interpreter returns a distribution object which
+has as parameters the arguments of the call, e.g. in our case it returns an object which represents a normal distribution with 
+$ \mu = 0 $ and $ \sigma = 1 $.
+
+The procedure \texttt{flip} has a similar behaviour to the call \texttt{(sample (bernoulli-dist 0.5))} that is equivalent to the call
+\texttt{(bernoulli 0.5)}. One difference is that \texttt{flip} returns a value which is either \texttt{\#f} or \texttt{\#t}, while 
+\texttt{(bernoulli 0.5)} returns a value which is either $0$ or $1$.
 
 
 \subsection*{Exercise 4.2}
 Evaluate
 \begin{lstlisting}
-    (dist? (normal-dist 0 1))
+(dist? (normal-dist 0 1))
     
-    (dist? (bernoulli-dist 0.5))
+(dist? (bernoulli-dist 0.5))
 
-    (dist? flip)
+(dist? flip)
 \end{lstlisting}
 What is the difference between flip and (bernoulli-dist 0.5)?
 
 \paragraph{Solution}
+\begin{enumerate}
+    \item Evaluation of \texttt{(dist? (normal-dist 0 1))}: The interpreter first evaluate the procedure name \texttt{dist?}, then
+        it evaluates it arguments. The only argument the interpreter has to evaluate is \texttt{(normal-dist 0 1)}. To evaluate
+        this argument, it evaluates first element of the list and than it evaluates the arguments of expression.
+        The expression \texttt{(normal-dist 0 1)} is a particular expression, indeed, it is a struct, so the interpreter creates a
+        new instance of the struct \texttt{normal-dist} with parameters $0$ and $1$. The returned instance is the actual parameter
+        of the procedure \texttt{dist?} which returns \texttt{\#t} if the argument is a distribution object, \texttt{\#f}
+        otherwise. In this particular case the returned object is a distribution object, so the evaluation of the expression is 
+        \texttt{\#t}.
+    \item Evaluation of \texttt{(dist? (bernoulli-dist 0.5))}: The evaluation of this expression is very similar to the previous
+        one, indeed, the procedure \texttt{dist?} has the same behaviour as before and the evaluation of \texttt{(bernoulli-dist 0.5)}
+        is similar to the evaluation of \texttt{(normal-dist 0 1)}.
+        In both cases the interpreter has to deal with a struct, so it evaluates the \textit{constructor} and returns an instance
+        of the structure type. In this case it returns a distribution object which represents a bernoulli distribution with success
+        probability of $0.5$.
+        Also in this case the final evaluation is \texttt{\#t}.
+    \item Evaluation of \texttt{(dist? filp)}: In this case the result is different, indeed, the procedure \texttt{flip} is not a 
+        distribution object, but it is a procedure with probabilistic behaviour. For this reason, when the interpreter evaluates
+        \texttt{(dist? flip)}, it returns \texttt{\#f}.
+\end{enumerate}
+
+The difference between \texttt{flip} and (bernoulli-dist 0.5) is that the first one is a procedure that can be called and its
+evaluation can return the value \texttt{\#f} or \texttt{\#t} both with probability $0.5$.
+Instead, the second expression is the call to a constructor of the structure \texttt{bernoulli-dist} and the evaluation returns
+a distribution object of the structure type, i.e. it returns an instance with parameter $0.5$. From this object it is possible
+to return some samples by the procedure according to the bernoulli distribution with success probability equal to $0.5$.
