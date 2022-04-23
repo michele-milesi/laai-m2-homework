@@ -5,8 +5,8 @@ Observe that our model of evaluation allows for combinations whose operators are
 describe the behaviour of the following procedure:
 
 \begin{lstlisting}
-    (define (a-plus-abs-b a b) 
-      ((if (> b 0) + -) a b))
+(define (a-plus-abs-b a b) 
+  ((if (> b 0) + -) a b))
 \end{lstlisting}
 
 \paragraph{Solution}
@@ -35,18 +35,18 @@ Ben Bitdiddle has invented a test to determine whether the interpreter he is fac
 or normal-order evaluation. He defines the following two procedures:
 
 \begin{lstlisting}
-    (define (p) (p))
+(define (p) (p))
 
-    (define (test x y)
-      (if (= x 0)
-          0
-          y))
+(define (test x y)
+  (if (= x 0)
+      0
+      y))
 \end{lstlisting}
 
 Then he evaluates the expression
 
 \begin{lstlisting}
-    (test 0 (p))
+(test 0 (p))
 \end{lstlisting}
 
 What behaviour will Ben observe with an interpreter that uses applicative-order evaluation? What behaviour will he
