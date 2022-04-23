@@ -20,10 +20,10 @@
   (take-sample))
 
 ; experiment with baserate = 0.1
-(hist (repeat (model 0.1) 50))
+(hist (repeat (model 0.1) 1000))
 
 ; experiment with baserate = 0.01
-(hist (repeat (model 0.01) 50))
+(hist (repeat (model 0.01) 1000))
 
 ; experiment with baserate = 0.001
-(hist (repeat (model 0.001) 50))
+(hist (repeat (model 0.001) 1000))
