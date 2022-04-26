@@ -66,7 +66,73 @@ Here are four expressions you could evaluate using this modified model:
 
 \paragraph{Solution}
 \begin{itemize}
-    \item[a.] 
+    \item[a.] First of all, the procedures are defined and the interpreter associates the name of the procedures with their definition
+        in the \textit{global environment}.
+        Then the \textit{expression 1} is evaluated: the first step is to retrieve the body of the procedure \texttt{winner} and
+        then the formal parameters are substituted by the actual parameters \texttt{'(alice)} and \texttt{'(bob)}. Now the interpreter
+        has to evaluate the following expression:
+        \begin{lstlisting}
+(if (< (total-pulling '(alice)) (total-pulling '(bob)))
+    '(bob)
+    '(alice)))  
+        \end{lstlisting}
+        The following step is to evaluate the conditional expression, so it starts by evaluating the \textit{predicate}: 
+        \texttt{(< (total-pulling '(alice)) (total-pulling '(bob)))}. The interpreter has to deal with the primitive predicate
+        \texttt{<}, so it needs to evaluate the arguments and than apply the predicate to the evaluated arguments.
+        The first argument to evaluate is \texttt{(total-pulling '(alice))}: the body of the procedure \texttt{total-pulling} 
+        is retrieved in the \textit{global environment} and it is substituted by the expression, 
+        then the actual parameter is applied to the body of the procedure. The expression \texttt{(total-pulling '(alice))} becomes
+        as follows:
+        \begin{lstlisting}
+(sum
+ (map (lambda (person) (if (lazy person)
+                           (/ (strength person) 2)
+                           (strength person)))
+      '(alice)))
+        \end{lstlisting}
+        The procedure \texttt{sum} takes as argument a list of numbers and returns the sum over the elements of the list. In this case
+        the argument of the procedure is another expression, so the interpreter has to evaluate the argument and then apply it to the
+        procedure \texttt{sum}.
+        Now the expression to be evaluated is the following:
+        \begin{lstlisting}
+(map (lambda (person) (if (lazy person)
+                      (/ (strength person) 2)
+                      (strength person)))
+     '(alice))
+        \end{lstlisting}
+        The procedure \texttt{map} takes as arguments a \textit{lambda} expression and a list. The procedure applies the
+        \textit{lambda} expression to each element of the list and returns the list of the results of the \textit{lambda}
+        expression on the elements of the list in input.
+        So the first step is to evaluate the \textit{lambda} expression with argument \texttt{'alice}. The resulting expression is
+        the body of the \textit{lambda} expression with actual parameter \texttt{'alice}:
+        \begin{lstlisting}
+(if (lazy 'alice) (/ (strength 'alice) 2) (strength 'alice))
+        \end{lstlisting}
+        Since the interpreter has to evaluate a conditional expression, the interpreter firsts evaluate the \textit{predicate}.
+        To evaluate the call \texttt{(lazy 'alice)}, the interpreter first takes the body of the procedure and then substitutes
+        all the occurences of formal parameter by the value of the actual parameter. The resulting expression is:
+        \begin{lstlisting}
+(flip (/ 1 3))
+        \end{lstlisting}
+        The procedure \texttt{flip} is a probabilistic procedure, it can take as parameter the probability to return \texttt{\#t}.
+        In our case, the interpreter has to evaluate the expression \texttt{(/ 1 3)} and than apply the result to the procedure 
+        \texttt{flip}.
+        We suppose that the result of the call \texttt{(flip 1/3)} is \texttt{\#f}, so the result of the evaluation of the
+        \textit{predicate} in the conditional expression is \texttt{\#f}. Since the \textit{predicate} is false, the interpreter has
+        to evaluate the \textit{alternative} expression \texttt{(strength 'alice)}.
+        It is a procedure call, so the interpreter has to retrieve the body of the procedure and then to substitute the formal
+        parameter by the actual one.
+        The result is that the interpreter now has to evaluate the following expression:
+        \begin{lstlisting}
+(if (flip) 5 10)
+        \end{lstlisting}
+        The procedure \texttt{strength} is a particular type of procedure, indeed, it is memoized through the procedure \texttt{mem}.
+        This means that the first time the procedure is called, the result of the call is memorized and each time the procedure is
+        called with same the same argument, the interpreter does not evaluate the function, but it retireves the already computed
+        result in the \textit{global environment}.
+        This is the first time that \texttt{(strength 'alice)} is evaluated, so the procedure has to be evaluated in a normal way.
+        The body of the procedure is composed by a conditional expression, the procedure \texttt{flip} is evaluated and we suppose
+        that the result is \texttt{\#t}, so the procedure \texttt{strength} returns the value $5$.
     \item[b.]
     \item[c.]  
 \end{itemize}

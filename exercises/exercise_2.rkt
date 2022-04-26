@@ -85,7 +85,7 @@
 ; exercise 1.38
 (define (get-n i) 1)
 (define (get-d i)
-  (if (= (modulo (- i 2) 3) 0)
+  (if (= (remainder (- i 2) 3) 0)
       (* (+ (quotient
              (- i 2)
              3)

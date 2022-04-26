@@ -24,9 +24,9 @@ The \textit{golden ratio} is defined as follows: \[ \varphi = \frac{1 + \sqrt{5}
 It is the fixed point of the transformation $ x \mapsto 1 + \frac{1}{x} $ indeed if we apply the transformation to $ \varphi $
 we obtain:
 \[ 
-    1 + \frac{1}{\varphi} = 1 + \cfrac{1}{\cfrac{1 + \sqrt{5}}{2}} = 1 + \frac{2}{1 + \sqrt{5}} = \frac{3 + \sqrt{5}}{1 + \sqrt{5}} 
-    = \frac{3 + \sqrt{5}}{1 + \sqrt{5}} \cdot \frac{1 - \sqrt{5}}{1 - \sqrt{5}} = \frac{-2 - 2\sqrt{5}}{-4} =
-    \frac{1 + \sqrt{5}}{2} = \varphi
+    1 + \frac{1}{\varphi} = 1 + \cfrac{1}{\left( \cfrac{1 + \sqrt{5}}{2} \right) } = 1 + \frac{2}{1 + \sqrt{5}} = 
+    \frac{3 + \sqrt{5}}{1 + \sqrt{5}} = \frac{3 + \sqrt{5}}{1 + \sqrt{5}} \cdot \frac{1 - \sqrt{5}}{1 - \sqrt{5}} = 
+    \frac{-2 - 2\sqrt{5}}{-4} = \frac{1 + \sqrt{5}}{2} = \varphi
 \]
 
 The transformation can be defined in Racket as follows:
@@ -236,7 +236,7 @@ So we defined the procedures \texttt{get-n} and \texttt{get-d} as follows:
 \begin{lstlisting}[caption={Definition of the procedures \texttt{get-n} and \texttt{get-d}}, captionpos=b]
 (define (get-n i) 1)
 (define (get-d i)
-  (if (= (modulo (- i 2) 3) 0)
+  (if (= (remainder (- i 2) 3) 0)
       (* (+ (quotient
              (- i 2)
              3)
