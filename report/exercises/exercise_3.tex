@@ -170,12 +170,53 @@ Here are four expressions you could evaluate using this modified model:
 
         \paragraph*{Expression 2} \texttt{(equal? '(alice) (winner '(alice) '(bob)))}
 
+        The predicate \texttt{equal?} returns \texttt{\#t} when the two arguments are euqal, it return \texttt{\#f} otherwise, so
+        the interpreter has to evaluate the two \textit{operands} and then to compare them. The first \textit{operand} is a quoted
+        data object, so it is a list which contains the symbol \texttt{'alice}. The evaluation of the second \textit{operand} is
+        identical to the evaluation of \textit{expression 1}. 
         
+        Since there are some probabilistic procedures which have to be evaluated, the result of the evaluation could be different 
+        from the previous one. In particular we suppose that in this case the call \texttt{(lazy 'alice)} returns \texttt{\#f} and 
+        the call \texttt{(lazy 'bob)} returns \texttt{\#f}.
+        Since the procedure \texttt{strength} is memoized, the calls \texttt{(strength 'alice)} and \texttt{(strength 'bob)} return
+        the same values as before, i.e. Both the calls return the value $5$.
+        
+        The two teams \texttt{'(alice)} and \texttt{'(bob)} have the same value (i.e $5$) returned by the procedure 
+        \texttt{total-pulling}, so the evaluation of the procedure \texttt{winner} returns \texttt{'(alice)}.
+        Since the two arguments of the predicate \texttt{equal?} are equal, the evaluation of \textit{expression 2} is \texttt{\#t}.
 
 
-        \paragraph*{Expression 3}
+        \paragraph*{Expression 3} The \textit{expression 3} is the following one: 
+        \begin{lstlisting}
+(and (equal? '(alice) (winner '(alice) '(bob)))
+     (equal? '(alice) (winner '(alice) '(fred))))
+        \end{lstlisting}
 
-        \paragraph*{Expression 4}
+        The logical composition \texttt{and} of the two predicates \texttt{equal?} is evaluated by first evaluating the first operand.
+        If the evaluation returns \texttt{\#t}, then the second operand is evaluated; if it is \texttt{\#t}, then is evaluated the 
+        third one (if present) and so on and so forth.
+        If all the values of the operands are \texttt{\#t}, then the evaluation of the expression is \texttt{\#t}, otherwise when
+        one operand is evaluated as \texttt{\#f}, then the expression is evaluated as \texttt{\#f} and the follwing operands are not
+        evaluated.
+        
+        So the interpreter evaluates the first \texttt{equal?} expression and the evaluation is the same as the previous case.
+        We suppose now that \texttt{'alice} is \textit{lazy} and \texttt{'bob} is not \textit{lazy}. In this case the procedure
+        \texttt{winner} returns the value \texttt{'(bob)}, so the evaluation of the first operand returns the value \texttt{\#f} since
+        \texttt('(alice)) is different from \texttt('(bob)).
+        Thus the evaluation of the \texttt{and} is stopped and the returned value is \texttt{\#f}.
+
+
+        \paragraph*{Expression 4} The \textit{expression 4} is the following one: 
+        \begin{lstlisting}
+(and (equal? '(alice) (winner '(alice) '(bob)))
+     (equal? '(jane) (winner '(jane) '(fred))))
+        \end{lstlisting}
+
+        We have already dissussed in detail about the evaluation of the procedures and predicates in this expression, so the main
+        argumentation concerns the results of the evaluation of the \textit{expression 4}.
+        Let us suppose that \texttt{'alice} is not \textit{lazy} and \texttt{'bob} is \textit{lazy}. The first argument of the
+        \texttt{and} predicate is \textit{true}, so the interpreter has to evaluate the second expression.
+        
 
 
     \item[b.]
