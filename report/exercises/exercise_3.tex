@@ -217,9 +217,70 @@ Here are four expressions you could evaluate using this modified model:
         Let us suppose that \texttt{'alice} is not \textit{lazy} and \texttt{'bob} is \textit{lazy}. The first argument of the
         \texttt{and} predicate is \textit{true}, so the interpreter has to evaluate the second expression.
         
+        Since both the calls \texttt{(strength 'jane)} and \texttt{(strength 'fred)} have been evaluated, their evaluation is 
+        happens in a ``standard'' way and their values are memorized into the \textit{global environment}.
+        Let us suppose both \texttt{'jane} and \texttt{'fred} are strong, so the value returned by the procedure \texttt{strength}
+        is $10$ and we suppose that the evaluation of \texttt{(lazy 'jane)} is \texttt{\#f} and the evaluation of 
+        \texttt{(lazy 'fred)} is \textit{ture}.
 
+        Thus the evaluation of \texttt{(winner '(jane) '(fred))} returns \texttt{'(jane)} which is equal to the first argument of the
+        predicate \texttt{equal?}. Since both the operands of the \texttt{and} predicate are \textit{true}, the evaluation of the
+        \textit{expression 4} is \texttt{\#t}.
 
-    \item[b.]
+    \item[b.] To compute the probability for each possible return value from each expression it has been decided that the execution
+        of the four expressions is sequential, thus it is necessary to make some assumption when the procedure \texttt{strength} is
+        called, indeed, it is a memoized procedure, so the first evaluation influences the following calls.
+
+        \paragraph*{Expression 1} When the interpreter has to evaluate this first expression, the procedure \texttt{strength} has never 
+        called before for both \texttt{'alice} and \texttt{'bob}, so they can assume either the value $5$ or $10$ after evaluating
+        the procedure \texttt{strength}. Furthermore they can result either \textit{lazy} or \textit{not lazy}, thus there are
+        $16$ combinations of values that the two teams can assume.
+        In particular, it is possible to build a table whose rows and columns are composed by all the possible combinations of
+        the outcomes of the probabilistic procedures \texttt{strength} and \texttt{lazy}, in particular
+        the rows are all the possible outcomes of these procedures for one team (i.e. \texttt{('alice)}), 
+        while the columns are all the possible outcomes of these procedures for the other team (i.e. \texttt{'(bob)}).
+        Each cell of the table contains the probability to get that particular case. The computed probability are shown
+        in Table~\ref{tab:exp-1}.
+        The table shows all the possible combinations of values that \texttt{'alice} and \texttt{'bob} can get, the cells coloured
+        in Violet are the cases where \texttt{'alice} wins over \texttt{'bob}, instead, the cells coloured in Orange are those
+        where \texttt{'bob} wins.
+
+        Thus to compute the probability that \texttt{'(alice)} wins it is sufficient to sum all the probabilities coloured in Violet,
+        while to compute the probability that \texttt{'(bob)} wins it is sufficient to summ all the probabilities coloured in Orange.
+        The result is the following:
+        \[ P(win = alice) = 25 / 36 \]
+        \[ P(win = bob) = 11 / 36 \]
+        \begin{table}[H]
+            \centering
+            \bgroup
+                \def\arraystretch{1.5}
+                \begin{tabular}{| l | C{1.8cm} C{1.8cm} C{1.8cm} C{1.8cm}  |}
+                    \hline
+                    \backslashbox{\textcolor{Violet}{\textbf{'(alice)}}}{\textcolor{RedOrange}{\textbf{'(bob)}}} & 
+                        \textbf{strong lazy} & \textbf{strong !lazy} & \textbf{!strong lazy} & \textbf{!strong !lazy} \\
+                    \hline
+
+                    \textbf{strong - lazy} & \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
+                        \textcolor{Violet}{$1/36$} & \textcolor{Violet}{$1/18$} \\ 
+
+                    \textbf{strong - !lazy} & \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} & 
+                        \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} \\ 
+                    
+                    \textbf{!strong - lazy} & \textcolor{RedOrange}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
+                        \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} \\ 
+                    
+                    \textbf{!strong - !lazy} & \textcolor{Violet}{$1/18$} & \textcolor{RedOrange}{$1/9$} & 
+                        \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} \\
+                    \hline
+                \end{tabular}
+            \egroup
+            \caption{
+                Probabilities of all possible cases of the \textit{expression 1}. The cells coloured in Violet are the ones where
+                \texttt{'alice} wins against \texttt{'bob}.
+            }
+            \label{tab:exp-1}
+        \end{table}
+     
     \item[c.]  
 \end{itemize}
 
@@ -298,7 +359,7 @@ The histogram of the generated samples is shown in Figure~\ref{fig:3-5}.
 
 \subsection*{Exercise 3.7}
 Convert Table~\ref{tab:es3-7} to a compact Racket program.
-\begin{table}[h]
+\begin{table}[H]
     \begin{center}
         \begin{tabular}{ccc}
             \hline
