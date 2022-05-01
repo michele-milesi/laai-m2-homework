@@ -248,28 +248,28 @@ Here are four expressions you could evaluate using this modified model:
         Thus to compute the probability that \texttt{'(alice)} wins it is sufficient to sum all the probabilities coloured in Violet,
         while to compute the probability that \texttt{'(bob)} wins it is sufficient to summ all the probabilities coloured in Orange.
         The result is the following:
-        \[ P(win = alice) = 25 / 36 \]
-        \[ P(win = bob) = 11 / 36 \]
+        \[ P(winner = alice) = 25 / 36 \]
+        \[ P(winner = bob) = 11 / 36 \]
         \begin{table}[H]
             \centering
             \bgroup
                 \def\arraystretch{1.5}
-                \begin{tabular}{| l | C{1.8cm} C{1.8cm} C{1.8cm} C{1.8cm}  |}
+                \begin{tabular}{| l | C{1.8cm} C{1.8cm} C{1.8cm} C{1.8cm}  |}                    
                     \hline
                     \backslashbox{\textcolor{Violet}{\textbf{'(alice)}}}{\textcolor{RedOrange}{\textbf{'(bob)}}} & 
-                        \textbf{strong lazy} & \textbf{strong !lazy} & \textbf{!strong lazy} & \textbf{!strong !lazy} \\
+                        \textbf{strong lazy} & \textbf{strong $\neg$lazy} & \textbf{$\neg$strong lazy} & \textbf{$\neg$strong $\neg$lazy} \\
                     \hline
 
-                    \textbf{strong - lazy} & \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
+                    \textbf{strong $\land$ lazy} & \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
                         \textcolor{Violet}{$1/36$} & \textcolor{Violet}{$1/18$} \\ 
 
-                    \textbf{strong - !lazy} & \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} & 
+                    \textbf{strong $\land$ $\neg$lazy} & \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} & 
                         \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} \\ 
                     
-                    \textbf{!strong - lazy} & \textcolor{RedOrange}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
+                    \textbf{$\neg$strong $\land$ lazy} & \textcolor{RedOrange}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
                         \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} \\ 
                     
-                    \textbf{!strong - !lazy} & \textcolor{Violet}{$1/18$} & \textcolor{RedOrange}{$1/9$} & 
+                    \textbf{$\neg$strong $\land$ $\neg$lazy} & \textcolor{Violet}{$1/18$} & \textcolor{RedOrange}{$1/9$} & 
                         \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} \\
                     \hline
                 \end{tabular}
@@ -281,6 +281,149 @@ Here are four expressions you could evaluate using this modified model:
             \label{tab:exp-1}
         \end{table}
      
+        \paragraph*{Expression 2} Since the procedure \texttt{strength} is memoized, the results of the evaluation of the previous
+        expression influences the the probability for each possible outcome of this expression.
+        In particular, the values of the strength of both \texttt{'alice} and \texttt{'bob} are fixed, so the probabilistic
+        behaviour of the evaluation of this expression depends only on the result of the procedure \texttt{lazy}, so the table
+        of probabilities has less entries.
+
+        Let us suppose that during the evaluation of the \textit{expression 1} the strength assigned to both \texttt{'alice} and
+        \texttt{'bob} is $5$. Thus the table contains only four different cases: \textit{(i)} Both \texttt{'alice} and
+        \texttt{'bob} are \textit{lazy}; \textit{(ii)} \texttt{'alice} is \textit{lazy} and \texttt{'bob} is \textit{lazy};
+        \textit{(iii)} \texttt{'alice} is \textit{not lazy} and \texttt{'bob} is \textit{lazy}; \textit{(iv)} Both \texttt{'alice} and
+        \texttt{'bob} are \textit{not lazy}.
+        The Table~\ref{tab:exp-2} represents the different probability of all possible cases: also in this case, the cells coloured
+        in Violet are the ones where \texttt{'alice} wins. The result is the following:
+        \[ P(winner = alice\;|\;strength(alice) = 5 \land strength(bob) = 5) = 7/9 \]
+        Thus the probability that the \textit{expression 2} returns the value \texttt{\#t} is $7/9$ and the probability that it
+        returns the value \texttt{\#f} is $2/9$.
+        \begin{table}[H]
+            \centering
+            \bgroup
+                \def\arraystretch{1.5}
+                \begin{tabular}{| c | c c|}                    
+                    \hline
+                    \backslashbox{\textcolor{Violet}{\textbf{'(alice)}}}{\textcolor{RedOrange}{\textbf{'(bob)}}} & 
+                        \textbf{lazy} & \textbf{$\neg$lazy} \\
+                    \hline
+
+                    \textbf{lazy} & \textcolor{Violet}{$1/9$} & \textcolor{RedOrange}{$2/9$} \\ 
+
+                    \textbf{$\neg$lazy} & \textcolor{Violet}{$2/9$} & \textcolor{Violet}{$4/9$} \\ 
+                    \hline
+                \end{tabular}
+            \egroup
+            \caption{
+                Probabilities of all possible cases of the \textit{expression 2}. The cells coloured in Violet are the ones where
+                \texttt{'alice} wins against \texttt{'bob}.
+                It is important to remeber that both \texttt{'alice} and \texttt{'bob} are \textit{weak} (i.e. the value assigned to
+                their strength is $5$).
+            }
+            \label{tab:exp-2}
+        \end{table}
+
+        \paragraph*{Expression 3} This expression contains the logical operator \texttt{and}, so the value returned is \texttt{\#t}
+        if both the operands are \textit{true}. The first operand is euqal to the previous expression, while the second operand
+        is different: the first team (i.e. \texttt{'(alice)}) has already an assigned value to the \textit{strength}, while the second 
+        team (i.e. \texttt{'(fred)}) has not any assigned value to the \textit{strength}.
+
+        It is important to remeber that the second operand is not interpreted if the first one is evaluated as \texttt{\#f}, but this
+        fact does not influence the probabilities of the outcomes of this expression, it will influence the probabilities of the
+        \textit{expression 4}.
+
+        The expression can be divided in two independent parts: the first one is the match between \texttt{'(alice)} and 
+        \texttt{'(bob)} and the second part is the match between \texttt{'(alice)} and \texttt{'(fred)}. Thus it is possible
+        to compute the probabilities of these parts and then multiply them to get the final probability.
+        
+        The first probability to compute is euqal to the probability of \texttt{expression 2}, so we can refer to the 
+        Table~\ref{tab:exp-2} and the probability to get the value \textit{true} is $7/9$.
+        Regarding the second operand, it is necessary to consider different cases, indeed, the interpreter has to evaluate only the
+        laziness of \texttt{'alice} and it has to evaluate both the strength and laziness of \texttt{'fred}. For this reason it is
+        possible to compute a table with two rows (i.e. the number possible values of the laziness of \texttt{'alice}) and four columns
+        (i.e. the number of possible combinations of the strength and laziness of \texttt{'fred}).
+        The Table~\ref{tab:exp-3} contains the probabilities for all possible cases of the second part of the \textit{expression 3}.
+
+        \begin{table}[H]
+            \centering
+            \bgroup
+                \def\arraystretch{1.5}
+                \begin{tabular}{| l | C{1.8cm} C{1.8cm} C{1.8cm} C{1.8cm}  |}                    
+                    \hline
+                    \backslashbox{\textcolor{Violet}{\textbf{'(alice)}}}{\textcolor{RedOrange}{\textbf{'(fred)}}} & 
+                        \textbf{strong lazy} & \textbf{strong $\neg$lazy} & \textbf{$\neg$strong lazy} & \textbf{$\neg$strong $\neg$lazy} \\
+                    \hline
+
+                    \textbf{$\left(\neg\text{ strong}\right)$ lazy} & \textcolor{RedOrange}{$1/18$} & \textcolor{RedOrange}{$1/9$} & 
+                        \textcolor{Violet}{$1/18$} & \textcolor{RedOrange}{$1/9$} \\ 
+
+                    \textbf{$\left(\neg\text{ strong}\right)$ $\neg$lazy} & \textcolor{Violet}{$1/9$} & \textcolor{RedOrange}{$2/9$} & 
+                        \textcolor{Violet}{$1/9$} & \textcolor{Violet}{$2/9$} \\
+
+                    \hline
+                \end{tabular}
+            \egroup
+            \caption{
+                Probabilities of all possible cases of the second part of the \textit{expression 3}. 
+                The cells coloured in Violet are the ones where \texttt{'alice} wins against \texttt{'fred}.
+                It is important to remeber that \texttt{'alice} is \textit{weak} (i.e. the value assigned to her strength is $5$).
+            }
+            \label{tab:exp-3}
+        \end{table}
+
+        The result is that the probability that the second part of the expression is evaluated with \textit{true} is $1/2$, indeed,
+        it is returned \texttt{\#t} when \texttt{'(alice)} wins against \texttt{'(fred)}. Thus we can compute the final probability
+        by multipling the probabilities of the two parts. Thus it results that the probability to get the value \texttt{\#t} is
+        $7/9\;\cdot\;1/2 = 7/18$. While the probability to get the value \texttt{\#f} is given by 
+        $P(outcome = false\;|\;strength(alice) = strength(bob) = 5) = 1 - 7/18 = 11/18$.
+        
+        \paragraph*{Expression 4} The computation of the probability for each possible result of this expression is strongly 
+        influenced by the result of the previous expression, indeed, if the second part of the \textit{expression 3} is evaluated,
+        then it is necessary to compute the probability conditioned by the value assigned to the \textit{strength} of \texttt{'fred}.
+        Otherwise the probabilities to compute are conditioned only by the values assigned to the \textit{strength} of \texttt{'alice}
+        and \texttt{'bob}.
+
+        Let us suppose that the resutl of the first part of the previous expression is \texttt{\#f}, so the second part has not been
+        evaluated and the value of the \textit{strength} of \texttt{'fred} is not fixed.
+        The computation of the probabilities for this expression is similar to the previous one, indeed, there are two independent
+        parts logically connected by the \texttt{and} predicate. The first part is equal to the expression one (Table~\ref{tab:exp-2}),
+        while the second part is equivalent to the \textit{expression 1}, since both \texttt{'jane} and \texttt{'fred} have never been
+        uesd as parameter of the procedure \texttt{strength}.
+        The Table~\ref{tab:exp-4} represents all the possible cases of the second part of this expression and it is equal to
+        the Table~\ref{tab:exp-1}. The table is shown for greater clearly. 
+        \begin{table}[H]
+            \centering
+            \bgroup
+                \def\arraystretch{1.5}
+                \begin{tabular}{| l | C{1.8cm} C{1.8cm} C{1.8cm} C{1.8cm}  |}                    
+                    \hline
+                    \backslashbox{\textcolor{Violet}{\textbf{'(jane)}}}{\textcolor{RedOrange}{\textbf{'(fred)}}} & 
+                        \textbf{strong lazy} & \textbf{strong $\neg$lazy} & \textbf{$\neg$strong lazy} & \textbf{$\neg$strong $\neg$lazy} \\
+                    \hline
+
+                    \textbf{strong $\land$ lazy} & \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
+                        \textcolor{Violet}{$1/36$} & \textcolor{Violet}{$1/18$} \\ 
+
+                    \textbf{strong $\land$ $\neg$lazy} & \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} & 
+                        \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} \\ 
+                    
+                    \textbf{$\neg$strong $\land$ lazy} & \textcolor{RedOrange}{$1/36$} & \textcolor{RedOrange}{$1/18$} & 
+                        \textcolor{Violet}{$1/36$} & \textcolor{RedOrange}{$1/18$} \\ 
+                    
+                    \textbf{$\neg$strong $\land$ $\neg$lazy} & \textcolor{Violet}{$1/18$} & \textcolor{RedOrange}{$1/9$} & 
+                        \textcolor{Violet}{$1/18$} & \textcolor{Violet}{$1/9$} \\
+                    \hline
+                \end{tabular}
+            \egroup
+            \caption{
+                Probabilities of all possible cases of the second part of the \textit{expression 4}. 
+                The cells coloured in Violet are the ones where \texttt{'jane} wins against \texttt{'fred}.
+            }
+            \label{tab:exp-4}
+        \end{table}
+
+        The result is that the \textit{expression 4} returns the value \texttt{\#t} with probability $7/9 \cdot 25/36 = 175/324 
+        \approx 0.54$, while the probability to get the value \texttt{\#f} is $ 1 - 175/324 = 149/324 \approx 0.46$.
+
     \item[c.]  
 \end{itemize}
 
