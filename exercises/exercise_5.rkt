@@ -1,5 +1,7 @@
 #lang gamble
- (require math/number-theory)
+(require math/number-theory)
+
+; NOTE: the follwing one is a Church program, so it has to be executed with a Church interpreter
 
 ;; define some variables and utility functions
 (define letters '(a b c d e f g h i j k l m n o p q r s t u v w x y z) )
@@ -23,13 +25,18 @@
    (define my-position (get-position my-letter))
    (define my-win-probability (/ 1.0 (* my-position my-position)))
    my-win-probability ;to do
-  ;  (define win? ...)
+   (define win? (if (equal? my-letter 'a) 
+                    #t 
+                    (flip my-win-probability)))
 
-   ;; query
-  ;  ...
+   ;; query to get the probability P(h | win)
+   my-letter
+
+   ; query to get the probability P(vowel | win) and P(consonant | win)
+   ; (if (vowel? my-letter) 'vowel 'consonant) 
 
    ;; condition
-  ;  ...
+   win?
    ))
 
 ; (barplot distribution)

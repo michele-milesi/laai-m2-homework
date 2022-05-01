@@ -385,9 +385,9 @@ Here are four expressions you could evaluate using this modified model:
         Let us suppose that the resutl of the first part of the previous expression is \texttt{\#f}, so the second part has not been
         evaluated and the value of the \textit{strength} of \texttt{'fred} is not fixed.
         The computation of the probabilities for this expression is similar to the previous one, indeed, there are two independent
-        parts logically connected by the \texttt{and} predicate. The first part is equal to the expression one (Table~\ref{tab:exp-2}),
-        while the second part is equivalent to the \textit{expression 1}, since both \texttt{'jane} and \texttt{'fred} have never been
-        uesd as parameter of the procedure \texttt{strength}.
+        parts logically connected by the \texttt{and} predicate. The first part is equal to the \textit{expression 2} 
+        (Table~\ref{tab:exp-2}), while the second part is equivalent to the \textit{expression 1}, since both \texttt{'jane} and
+        \texttt{'fred} have never been uesd as parameter of the procedure \texttt{strength}.
         The Table~\ref{tab:exp-4} represents all the possible cases of the second part of this expression and it is equal to
         the Table~\ref{tab:exp-1}. The table is shown for greater clearly. 
         \begin{table}[H]
@@ -422,9 +422,21 @@ Here are four expressions you could evaluate using this modified model:
         \end{table}
 
         The result is that the \textit{expression 4} returns the value \texttt{\#t} with probability $7/9 \cdot 25/36 = 175/324 
-        \approx 0.54$, while the probability to get the value \texttt{\#f} is $ 1 - 175/324 = 149/324 \approx 0.46$.
+        \approx 0.54$, while the probability to get the value \texttt{\#f} is $1 - 175/324 = 149/324 \approx 0.46$.
 
-    \item[c.]  
+    \item[c.] The computed probabilities of \textit{expression 3} and \textit{expression 4} are different because in the first case
+        the strength of three teams is certainly fixed, indeed, the strength of both \texttt{'alice} and \texttt{'bob} is assigned
+        during the evaluation of the \textit{expression 1}. Instead, in the second case, the strength is assigned certainly to two
+        teams (i.e. \texttt{'(alice)} and \texttt{'(bob)}) and it can happen that it is assigned also to \texttt{'fred}. In this case
+        the probability of \textit{expression 4} might turn out equal to the probability computed for \textit{expression 3}, indeed,
+        if the strength of \texttt{'alice} is equal to the strength of \texttt{'fred}, then the two probabilities are equal.
+        Quite the opposite, if the second part of the \textit{expression 3} is not evaluated (i.e. as happened in points \textit{a}
+        and \textit{b}) the two probabilities are different because in \textit{expression 3} the second part is a conditional
+        probability, while in \textit{expression 4} the second part is not a conditional probability because the values of the
+        strength of \texttt{'jane} and \texttt{'fred} are not evaluated.
+
+        In conclusion, the probabilities of \textit{expression 3} and \textit{expression 4} can be equal or different, they depend
+        on the probabilistic behaviour of the procedures \texttt{lazy} and \texttt{strength}.
 \end{itemize}
 
 \subsection*{Exercise 3.6}
