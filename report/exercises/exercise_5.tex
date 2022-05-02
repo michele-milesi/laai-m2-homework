@@ -17,12 +17,12 @@ The answers to the questions are shown below:
         In particular it is proven that:
         \[ P(h\;|\;\text{win}) = \frac{P(win\;|\;\text{h}) \cdot P(h)}{P(win)}\]
     
-    \item[B.] The probability $P(h\;|\;\text{win})$ has been manually computed for each hypotesis with Excel. First of all, the
+    \item[B.] The probability $P(h\;|\;\text{win})$ has been manually computed for each hypothesis with Excel. First of all, the
         \textit{likelihood} has been computed by using the following formula: $P(win\;|\;\text{h}) = 1/Q(h)^{2}$ where $Q(h)$ is
         the position of the letter in the alphabet. Then the numerator of the formula of the Bayes' theorem is computed.
         To compute the marginal probability $P(win)$ the following formula has be used:
         \[ P(win) = \sum_{h} P(win\;|\;\text{h}) \cdot P(h)\]
-        Then the posterior probability has been computed for each hypotesis by using the Bayes' theorem and the results are shown
+        Then the posterior probability has been computed for each hypothesis by using the Bayes' theorem and the results are shown
         in Table~\ref{tab:casino-game}.
         \begin{table}[H]
             \centering
@@ -71,7 +71,7 @@ The answers to the questions are shown below:
                 \end{tabular}
             \end{minipage}
             
-            \caption{Manually computed posterior probability $P(h\;|\;\text{win})$ for each hypotesis}
+            \caption{Manually computed posterior probability $P(h\;|\;\text{win})$ for each hypothesis}
             \label{tab:casino-game}
         \end{table}
     \item[C.] The procedure \texttt{my-list-index} takes in input 3 parameters: \textit{(i)} \texttt{needle} that is an object, 
