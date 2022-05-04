@@ -38,10 +38,12 @@
 ;; actually compute p(h | win)
 (define distribution
   (enumeration-query
-   (define my-letter (multinomial letters letter-probabilities))
+   (define my-letter
+     (multinomial letters letter-probabilities))
 
    (define my-position (get-position my-letter))
-   (define my-win-probability (/ 1.0 (* my-position my-position)))
+   (define my-win-probability
+     (/ 1.0 (* my-position my-position)))
    (define win? (if (equal? my-letter 'a) 
                     #t 
                     (flip my-win-probability)))
@@ -49,7 +51,7 @@
    ; query to get the probability P(h | win)
    my-letter
 
-   ; query to get the probability P(vowel | win) and P(consonant | win)
+   ; query to get the probabilities P(vowel | win) and P(consonant | win)
    ; (if (vowel? my-letter) 'vowel 'consonant) 
 
    ;; condition

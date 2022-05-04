@@ -1,6 +1,15 @@
 \section*{Exercise 7}
 
-\subsection*{Exercise 7.1}
+\begin{definition}[MC, functional view] 
+    \normalfont A MC over a state space $X$ is a function $ c: X \to \mathcal{D}(X) $.
+\end{definition}
+\begin{definition}
+    \normalfont A \textit{stochastic matrix} of dimension $n$ is a $ n \times n$-matrix $P$ whose entries belong to $[0, 1]$ and
+    such that each row vector gives a distribution, i.e.:
+    \[ \forall i.\; \sum_{j} P(i, j) = 1 \]
+\end{definition}
+
+\subsection*{Exercise 7 (1)}
 \begin{proposition}
     The functional and matrix-based definitions of a MC are equivalent.
 \end{proposition}
@@ -11,25 +20,38 @@
     Vice versa, given $ P $, we define $ c_{P}(x_{i})(x_{j}) = P(i, j) $.
 \end{proof}
 
-\paragraph{Instructions} \textit{Complete the above proof. Prove, in particular that for any $ x \in X $, $ c_{P} (x) $ is indeed a distribution; 
-that $ c_{P} $ is a stochastic matrix; and that $ P_{cP} = P $ and $ c_{Pc} = c $.}
+\paragraph{Instructions} \textit{Complete the above proof. Prove, in particular that for any $ x \in X $, $ c_{P} (x) $ is indeed a 
+distribution; that $ c_{P} $ is a stochastic matrix; and that $ P_{c_{P}} = P $ and $ c_{P_{c}} = c $.}
 
 \paragraph{Solution}
+\begin{proof}
+    To prove that the matrix $P_{c}$ is a stochastic matrix, we have to prove that the sum of the elements of each row of the matrix
+    $P_{c}$ is equal to $1$.
+    Since we have defined the matrix $P_{c}$ as $ P_{c}(i, j) = c(x_{i})(x_{j}) $, we can write the follwing equality:
+    \[ \forall i\;\sum_{j} P_{c}(i, j) = \sum_{j} c(x_{i})(x_{j}) = 1 \]
+    because $c$ is a Markov Chain over the state space $X$.
+
+   On the other hand, we need to prove that $c_{P}$ is a distribution. We can procede as before: we have defined $c_{P}$ as
+   $ c_{P}(x_{i})(x_{j}) = P(i, j)$, thus it is possible to write the follwing equality:
+   \[ \forall i\;\sum_{j} c_{P}(x_{i})(x_{j}) = \sum_{j} P(i, j) = 1 \]
+   because $P$ is a stochastic matrix, so each row of the matrix gives a distribution, thus the sum of the elements of each row is
+   equal to $1$.
+\end{proof}
 
 
-\subsection*{Exercise 7.2}
+\subsection*{Exercise 7 (2)}
 \textit{Prove that $ c(x) = c^{*}(\delta_{x}) $.}
 
 \paragraph{Solution}
 
 
-\subsection*{Exercise 7.3}
+\subsection*{Exercise 7 (3)}
 \textit{Prove that $ c^{*}(\psi) = \psi(P_{c}) $.}
 
 \paragraph{Solution}
 
 
-\subsection*{Exercise 7.4}
+\subsection*{Exercise 7 (4)}
 \textit{Prove that f $ \psi $ satisfied DBC, then $ \psi $ is stationary for $ P $.}
 
 \paragraph{Solution}

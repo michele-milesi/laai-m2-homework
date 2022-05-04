@@ -1,6 +1,6 @@
 \section*{Exercise 5}
 
-\subsection*{Exercise 5.4}
+\subsection*{Exercise 5 (4)}
 \href{http://v1.probmods.org/conditioning.html#exercises}{Probabilistic Models of Cognition - Exercise 4}
 
 \paragraph{Solution}
@@ -123,11 +123,69 @@ The answers to the questions are shown below:
             \centering
             \includegraphics[width=\linewidth]{images/5.4.d.png}
             \caption{
-              Distribution of the samples generated with the code in Listing~\ref{lst:casino-game-d}.
+                Distribution of the samples generated with the code in Listing~\ref{lst:casino-game-d}.
             }
             \label{fig:casino-game-d}
-          \end{figure}
-    \item[E.]
-    \item[F.]
-    \item[G.] 
+        \end{figure}
+    \item[E.] The code is completed as shown in Listing \ref{lst:casino-game-e}, in particular it is reported only the definition of
+        \texttt{distribution} because the other parts remain the same.
+        \begin{lstlisting}[caption={Definition of \texttt{distribution} in order to compute $P(h\;|\;\text{win})$.}, captionpos=b,
+            label={lst:casino-game-e}]
+(define distribution
+  (enumeration-query
+   (define my-letter 
+     (multinomial letters letter-probabilities))
+
+   (define my-position (get-position my-letter))
+   (define my-win-probability 
+     (/ 1.0 (* my-position my-position)))
+   (define win? (if (equal? my-letter 'a) 
+                    #t 
+                    (flip my-win-probability)))
+
+   ; query to get the probability P(h | win)
+   my-letter
+
+   ; query to get the probabilities P(vowel | win)
+   ; and P(consonant | win)
+   ; (if (vowel? my-letter) 'vowel 'consonant) 
+
+   ;; condition
+   win?
+   ))
+        \end{lstlisting}
+        The approximate distribution is shown in Figure~\ref{fig:casino-game-e}. It is possible to observe that the computed
+        probabilities are similar to the probabilities manually computed and that the letter with higher posterior probability
+        it the letter \textit{b}. This means that when we know that Bob has won, then it is more likely that he has received the
+        letter \textit{b} by the machine.
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[width=7cm]{images/5.4.e.png}
+            \caption{
+                Approximate distribution of posterior probability $P(h\;|\;\text{win})$ through the code in 
+                Listing~\ref{lst:casino-game-e}.
+            }
+            \label{fig:casino-game-e}
+        \end{figure}
+    \item[F.] To compute the posterior probabilities $P(vowel\;|\;\text{win})$ and $P(consonant\;|\;\text{win})$ it is sufficient to
+        replace the query part of the code in Listing~\ref{lst:casino-game-e} with the following piece of code:
+        \begin{lstlisting}[caption={Code to be put in place of \texttt{my-letter} in Listing~\ref{lst:casino-game-e}}, captionpos=b]
+(if (vowel? my-letter) 'vowel 'consonant) 
+        \end{lstlisting}
+        The result is that the program now computes the probability to get a \textit{vowel} or a \textit{consonant} given the evidence
+        that Bob has won. We can observe in Figure~\ref{fig:casino-game-f} that it is more likely that Bob has received a consonant
+        instead of a vowel.
+        \begin{figure}[ht!]
+            \centering
+            \includegraphics[width=\linewidth]{images/5.4.f.png}
+            \caption{
+                Approximate distribution of probabilities $P(vowel\;|\;\text{win})$ and $P(consonant\;|\;\text{win})$.
+            }
+            \label{fig:casino-game-f}
+        \end{figure}
+    \item[G.] With the mathematical notation the computation is made without taking into account all the probability tree, but it is
+        sufficient to apply the Bayes' theorem in order to compute the posterior probabilities. Instead, by using the Church program
+        the computation is completely automatic and the only thing to do is to define the prior probabilities and then to define the
+        query and the evidence. The disadvantage of the Church computation is that the interpreter has to evaluate all the paths in
+        the probability tree, so it can be used only when the domain of interest is limited and when the query is not too complex.
 \end{itemize}
