@@ -28,12 +28,12 @@ distribution; that $ c_{P} $ is a stochastic matrix; and that $ P_{c_{P}} = P $ 
     To prove that the matrix $P_{c}$ is a stochastic matrix, we have to prove that the sum of the elements of each row of the matrix
     $P_{c}$ is equal to $1$.
     Since we have defined the matrix $P_{c}$ as $ P_{c}(i, j) = c(x_{i})(x_{j}) $, we can write the follwing equality:
-    \[ \forall i\;\sum_{j} P_{c}(i, j) = \sum_{j} c(x_{i})(x_{j}) = 1 \]
+    \[ \forall i.\;\sum_{j} P_{c}(i, j) = \sum_{j} c(x_{i})(x_{j}) = 1 \]
     because $c$ is a Markov Chain over the state space $X$.
 
    On the other hand, we need to prove that $c_{P}$ is a distribution. We can procede as before: we have defined $c_{P}$ as
    $ c_{P}(x_{i})(x_{j}) = P(i, j)$, thus it is possible to write the follwing equality:
-   \[ \forall i\;\sum_{j} c_{P}(x_{i})(x_{j}) = \sum_{j} P(i, j) = 1 \]
+   \[ \forall i.\;\sum_{j} c_{P}(x_{i})(x_{j}) = \sum_{j} P(i, j) = 1 \]
    because $P$ is a stochastic matrix, so each row of the matrix gives a distribution, thus the sum of the elements of each row is
    equal to $1$.
 \end{proof}
@@ -43,15 +43,49 @@ distribution; that $ c_{P} $ is a stochastic matrix; and that $ P_{c_{P}} = P $ 
 \textit{Prove that $ c(x) = c^{*}(\delta_{x}) $.}
 
 \paragraph{Solution}
+The Dirac distribution of a state $x_{k}$ is defined as follows:
+\[ \delta_{x_{k}} = 
+    \begin{cases}
+        x_{k} = 1 \\
+        x_{i} = 0 & \text{if } i \neq k
+    \end{cases}
+\]
+We have defined the map $c^{*}(\phi)(y) = \sum_{x} \phi(x) \cdot c(x)(y)$, so we can write:
+\[ \forall y.\;c^{*}(\delta_{x_{k}})(y) = \sum_{x_{i}} \delta_{x_{k}}(x_{i}) \cdot c(x_{i})(y) = 1 \cdot c(x_{k})(y) = c(x_{k})(y) \]
+Since the Dirac distribution is always zero except for $x_{k}$ that is equal to $1$.
+This equality holds for each state $y$, so have proved that:
+\[ c^{*}(\delta_{x_{k}}) = c(x_{k}) \]
+
+The notation is slightly different from the one of the instructions, since I do not want to create confusion when the summation is
+written. Indeed, the goal is to make clear that the summation is defined over all the states of the \textit{state space} and that
+the only addend that is not null is the one for which the value of $\delta_{x_{x}}(x_{i}) = 1$ (i.e. for $x_{k}$).
 
 
 \subsection*{Exercise 7 (3)}
 \textit{Prove that $ c^{*}(\psi) = \psi(P_{c}) $.}
 
 \paragraph{Solution}
+The product $\psi P_{c}$ returns a vector of dimension $(1, n)$ where $n$ is the number of states. 
+Furthermore it is important to remember that: \textit{(i)} The matrix $ P_{c} $ has been defined as $ P_{c}(i, j) = c(x_{i})(x_{j}) $;
+\textit{(ii)} The map $c^{*}$ has been defined as follows: $ c^{*}(\phi)(y) = \sum_{x} \phi(x) c(x)(y) $.
+Thus we can write the following equality:
+\[ \forall y.\;(\psi P_{c})(y) = \sum_{x} \psi(x) \cdot P_{c}(x, y) \forone \sum_{x} \psi(x) c(x)(y) \fortwo c^{*}(\psi)(y) \]
+Since this holds forall $y$, then we can assert that $c^{*}(\psi) = \psi P_{c}$.
 
 
 \subsection*{Exercise 7 (4)}
-\textit{Prove that f $ \psi $ satisfied DBC, then $ \psi $ is stationary for $ P $.}
+\textit{Prove that if $ \psi $ satisfied DBC, then $ \psi $ is stationary for $ P $.}
 
 \paragraph{Solution}
+Before starting with the demonstration, it is important to remember the definition of \textit{DBC}.
+\begin{definition}
+    \normalfont Given a MC $P$, we say that a distribution $\psi$ satisfies \textit{detailed balanced condition} (DBC) if
+    \[ \forall x, y.\;\psi(x) \cdot P(x, y) = \psi(y) \cdot P(y, x) \]
+\end{definition} 
+Since $\psi$ satisfies DBC, the equality above holds for each state $x, y$. Thus it is possible to write the following equation:
+\[ 
+    \forall y.\;(\psi P)(y) = \sum_{x} \psi(x) \cdot P(x, y)\;\;\;\fordbc\;\;\;\sum_{x} \psi(y) \cdot P(y, x) = 
+    \psi(y) \cdot \sum_{x} P(y, x) = \psi(y)
+\]
+The last equality is due to the fact that is a stochastic matrix, so the sum of the elements of a row is equal to $1$.
+Since the equation holds for each $y$, then it is possible to assert that $\psi P = \psi$.

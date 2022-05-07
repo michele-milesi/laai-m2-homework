@@ -14,9 +14,15 @@
 \usepackage{diagbox}
 \usepackage{float}
 \usepackage{array}
+\usepackage{mathtools}
+
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\newcommand\forone{\stackrel{\mathclap{\normalfont\mbox{\textit{(i)}}}}{=}}
+\newcommand\fortwo{\stackrel{\mathclap{\normalfont\mbox{\textit{(ii)}}}}{=}}
+\newcommand\fordbc{\stackrel{\mathclap{\normalfont\mbox{\textit{DBC}}}}{=}}
 
 \definecolor{lgrey}{gray}{0.97}
 
