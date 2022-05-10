@@ -57,6 +57,8 @@ Compare the number of steps this takes with and without average damping.
 
 \paragraph{Solution} 
 First of all the procedure \texttt{fixed-point} has been modified in order to print the sequence of approximations it generates.
+The instructions \texttt{(display guess)} and \texttt{(newline)} are inserted in the local procedure \texttt{try} in order to be
+able to print all the guesses.
 \begin{lstlisting}[caption={Procedure \texttt{fixed-point} which prints the sequence of approximations it generates},captionpos=b]
 (define (fixed-point-print-seq f first-guess)
   (define (close-enough? v1 v2)
@@ -91,7 +93,7 @@ Then the transformation $ x \mapsto \frac{\log(1000)}{\log(x)} $ has been define
    1.1))
 \end{lstlisting}
 After that the two procedures are used to make a comparison between the number of steps, in both cases the initial guess is $ 1.1 $
-and it can be  show how the procedure with average damping takes less time to converge to the solution.
+and it can be shown how the procedure with average damping takes less time to converge to the solution.
 Below the approximation of the two methods are shown, the approximation without average damping takes $ 37 $ steps, while 
 the approximation with average damping takes $ 13 $ steps.
 \begin{lstlisting}

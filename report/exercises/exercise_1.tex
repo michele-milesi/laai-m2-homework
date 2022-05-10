@@ -13,19 +13,21 @@ describe the behaviour of the following procedure:
 The function \texttt{a-plus-abs-b} defined above takes in input 2 parameters and returns the sum $ a + |b| $. 
 The formal parameters of the fuction are \texttt{a} and \texttt{b}, while the body of the fuction is composed by a 
 a compound expression. The operator of the expression is a compound expression, indeed, it depends on the value of the
-parameter \texttt{b}, in particular, if the value of {b} is greater than zero, then it is performed a sum between the 
-operands, while if it is less than or equal to zero, then it is performed a substraction.
+parameter \texttt{b}, in particular, if the value of \texttt{b} is greater than zero, then a sum between the operands is performed,
+while if it is less than or equal to zero, then a substraction is performed.
 
 When this procedure is called, the formal parameters are substituted by the actual parameters, e.g. when we call the procedure as
-follows: \texttt{(a-plus-abs-b 5 2)} all the instances of \texttt{a} in the body of the function are substituted by the value
+follows: \texttt{(a-plus-abs-b 5 2)}, the body of the procedure is retreived from the \textit{global environment} and then 
+all the instances of \texttt{a} in the body of the function are substituted by the value
 $ 5 $ and all the instances of \texttt{b} are substituted by $ 2 $ and then the body of the function is evaluated.
 Considering that the operator is a compound expression, the interpreter firts evaluates it. 
 In particular it is a conditional  expression, so the interpreter evaluates the predicate \texttt{(< b 0)} 
 and if the condition is true, then it will evaluate the \textit{consequent}, otherwise it evaluates the \textit{alternative}.
 In the previous example, after evaluating the conditional expression the expression become \texttt{(+ 5 2)}.
 At this point the interpreter evaluates the \textit{operator}: since it is a primitive procedure, the interpreter evaluates all the 
-\textit{operands} and it applies the operator to the \textit{arguments} (i.e. the value of the operands).
-In the example above, it simplifies the expression with \texttt{7}.
+\textit{operands} (in this example the operands are primitive expressions, so further evaluation steps are not required) and it
+applies the operator to the \textit{arguments} (i.e. the value of the operands).
+In the example above, it simplifies the expression returning the value $7$.
 Now the interpreter cannot do any simplification of the expression, indeed, it has to handle a primitive expression, so 
 it does not perform any computation step and it returns the computed value.
 
