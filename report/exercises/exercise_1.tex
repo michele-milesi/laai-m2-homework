@@ -10,25 +10,26 @@ describe the behaviour of the following procedure:
 \end{lstlisting}
 
 \paragraph{Solution}
-The function \texttt{a-plus-abs-b} defined above takes in input 2 parameters and returns the sum $ a + |b| $. 
+The procedure \texttt{a-plus-abs-b} defined above takes in input 2 parameters and returns the sum $ a + |b| $. 
 The formal parameters of the fuction are \texttt{a} and \texttt{b}, while the body of the fuction is composed by a 
-a compound expression. The operator of the expression is a compound expression, indeed, it depends on the value of the
-parameter \texttt{b}, in particular, if the value of \texttt{b} is greater than zero, then a sum between the operands is performed,
+a compound expression. The operator of the expression is also a compound expression, indeed, it depends on the value of the
+parameter \texttt{b}. In particular, if the value of \texttt{b} is greater than zero, then a sum between the operands is performed,
 while if it is less than or equal to zero, then a substraction is performed.
 
-When this procedure is called, the formal parameters are substituted by the actual parameters, e.g. when we call the procedure as
-follows: \texttt{(a-plus-abs-b 5 2)}, the body of the procedure is retreived from the \textit{global environment} and then 
-all the instances of \texttt{a} in the body of the function are substituted by the value
-$ 5 $ and all the instances of \texttt{b} are substituted by $ 2 $ and then the body of the function is evaluated.
-Considering that the operator is a compound expression, the interpreter firts evaluates it. 
+When this procedure is called, the formal parameters are substituted by the actual parameters, e.g. when calling the procedure as
+follows: \texttt{(a-plus-abs-b 5 2)}, the body of the procedure is retrieved from the \textit{global environment} and then 
+all the instances of \texttt{a} in the body of the procedure are substituted by the value
+$ 5 $ and all the instances of \texttt{b} are substituted by $ 2 $; after that the body of the procedure is evaluated.
+Considering that the operator is a compound expression, the interpreter first evaluates it. 
 In particular it is a conditional  expression, so the interpreter evaluates the predicate \texttt{(< b 0)} 
-and if the condition is true, then it will evaluate the \textit{consequent}, otherwise it evaluates the \textit{alternative}.
-In the previous example, after evaluating the conditional expression the expression become \texttt{(+ 5 2)}.
+and if the condition is true, then it will evaluate the \textit{consequent} (i.e. \texttt{+}), otherwise it evaluates the 
+\textit{alternative} (i.e. \texttt{-}).
+In the previous example, after evaluating the conditional expression, the resulting expression is \texttt{(+ 5 2)}.
 At this point the interpreter evaluates the \textit{operator}: since it is a primitive procedure, the interpreter evaluates all the 
-\textit{operands} (in this example the operands are primitive expressions, so further evaluation steps are not required) and it
+\textit{operands} (in this example the operands are primitive expressions, so no further evaluation steps are needed) and it
 applies the operator to the \textit{arguments} (i.e. the value of the operands).
 In the example above, it simplifies the expression returning the value $7$.
-Now the interpreter cannot do any simplification of the expression, indeed, it has to handle a primitive expression, so 
+Now the interpreter cannot perform any simplification of the expression, indeed, it has to handle a primitive expression, so 
 it does not perform any computation step and it returns the computed value.
 
 
@@ -57,18 +58,18 @@ rule for the special form \texttt{if} is the same whether the interpreter is usi
 expression is evaluated first, and the result determines whether to evaluate the consequent or the alternative expression).
 
 \paragraph{Solution}
-In applicative-order evaluation, when a procedure is called, the arguments are evaluated first and then applied to the
-procedure; while in normal-order evaluation the arguments are not evaluated before the procedure call, but they are evaluated
+In applicative-order evaluation, when a procedure is called, the arguments are first evaluated and then applied to the
+procedure; whereas in normal-order evaluation the arguments are not evaluated before the procedure call, but they are evaluated
 when the body of the function is evaluated.
-In this example, an interpreter which uses applicative-order evaluation first evaluats the arguments, so it evaluates \texttt{0} 
+In this example, an interpreter which uses applicative-order evaluation evaluats the arguments first, so it evaluates \texttt{0} 
 (nothing to do) and \texttt{(p)} which causes a loop, indeed, the procedure \texttt{p} calls itself and it does not terminate.
 On the other side, an interpreter which uses normal-order evaluation does not evaluate the arguments before the evaluation of
-the body of the function, but it passes them without any computation. In this case the procedure call \texttt{(test 0 (p))}
+the body of the function, but it passes them without any computation step. In this case the procedure call \texttt{(test 0 (p))}
 returns the value \texttt{0}, indeed, the interpreter evaluates the conditional expression and, since the formal parameter \texttt{x}
-is substituted by the value \texttt{0}, the condition is true and the consequent (i.e. \texttt{0}) is returned.
+is substituted by the value \texttt{0}, the condition (i.e. \texttt{(= x 0)}) is true and the consequent (i.e. \texttt{0}) is returned.
 
 We can observe that the applicative-order evaluation can be useful when the computation of the arguments is heavy and the arguments are
-used many times in the body of the function, but some arguments can be evaluated even if they are not used and this can cause,
-as in this particular case, some problems.
-Instead, normal-order evaluation can be useful when the are used few times or not used, but if they are used many times and their
-computation is heavy, then the performances are worse than applicative-order evaluation.
+used many times in the body of the function. In this case some arguments can be evaluated even if they are not used in the body of the
+procedure (e.g. because of conditional expressions) and this can cause, as in this particular case, some problems.
+Instead, normal-order evaluation can be useful when the arguments are used few times or not used, but if they are used many times 
+and their computation is heavy, then the performances are worse than applicative-order evaluation.

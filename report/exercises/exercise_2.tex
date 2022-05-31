@@ -29,7 +29,8 @@ we obtain:
     \frac{-2 - 2\sqrt{5}}{-4} = \frac{1 + \sqrt{5}}{2} = \varphi
 \]
 
-The transformation can be defined in Racket as follows:
+\clearpage
+\noindent The transformation can be defined in Racket as follows:
 \begin{lstlisting}
 ; definition of transformation x -> 1 + 1/x
 (define (transformation x)
@@ -38,9 +39,10 @@ The transformation can be defined in Racket as follows:
 ; definition of golden ratio
 (define phi (/ (+ 1 (sqrt 5)) 2))
 \end{lstlisting}
-And the procedure \texttt{fixed-point} is used to compute the \textit{golden ratio}, as shown below, we can observe that the procedure
+The procedure \texttt{fixed-point} is used to compute the \textit{golden ratio} and, as shown below, we can observe that the procedure
 \texttt{fixed-point} computes $ \varphi $ with a good level of approximation.
-\begin{lstlisting}
+\begin{lstlisting}[caption={Racket console which shows the result of the procedure \texttt{fixed-point} and the value of $\varphi$}, 
+  captionpos=b]
 > (fixed-point transformation 1.1)
 1.6180364726455159
 > phi
@@ -80,26 +82,27 @@ Then the transformation $ x \mapsto \frac{\log(1000)}{\log(x)} $ has been define
   (/ (log 1000) (log x)))
 \end{lstlisting}
 \begin{lstlisting}[caption={Transformation with average damping},captionpos=b]
+; definition of transformation with average damping, 
+; i.e. x ->  (x + log(1000) / log(x)) / 2
+(define (log-transformation-avg-dmp x)
+  (average x (log-transformation x)))
+\end{lstlisting}
+The procedure \texttt{log-transformation-avg-dmp} calls the procedure \texttt{average} which takes in input two numbers and returns the
+arithmetic mean between the two arguments and it is defined as follows:
+\begin{lstlisting}
 ; definition of procedure which computes the average
 (define (average x y) 
   (/ (+ x y) 2))
-
-; definition of transformation x -> log(1000) / log(x) 
-; with average damping
-(define (log-transformation-avg-dmp)
-  (fixed-point-print-seq
-   (lambda (x)
-     (average x (log-transformation x)))
-   1.1))
 \end{lstlisting}
-After that the two procedures are used to make a comparison between the number of steps, in both cases the initial guess is $ 1.1 $
-and it can be shown how the procedure with average damping takes less time to converge to the solution.
+
+After that the two procedures are used to make a comparison between the number of steps: in both cases the initial guess is $ 1.1 $
+and it can be seen that the procedure with average damping takes less time to converge to the solution.
 Below the approximation of the two methods are shown, the approximation without average damping takes $ 37 $ steps, while 
 the approximation with average damping takes $ 13 $ steps.
 \begin{lstlisting}
 ; without average damping       ; with average damping
-> (fixed-point-print-seq        > (log-transformation-avg-dmp)       
-    log-transformation 1.1)          
+> (fixed-point-print-seq        > (fixed-point-print-seq 
+   log-transformation 1.1)         log-transformation-avg-dmp 1.1)
 1.1                             1.1
 72.47657378429035               36.78828689214517
 1.6127318474109593              19.352175531882512
@@ -175,31 +178,32 @@ the approximation with average damping takes $ 13 $ steps.
         computing recursivly the continued fraction. It has two formal parameters: \texttt{k} and \texttt{counter} which is the 
         counter of the performed iterations; when the \texttt{counter} reaches \texttt{k} (i.e. the number of iterations to be
         performed) the base case is reached and the returned value is computed.
-        The procedure \texttt{cont-frac} calls the procedure \texttt{cont-frac-rec} with initial parameters \texttt{k} and $ 0 $,
-        in this way we are sure that the number of iterations performed will be k (with \texttt{counter} from $1$ to \texttt{k}).
+        The procedure \texttt{cont-frac} calls the procedure \texttt{cont-frac-rec} with initial parameters \texttt{k} and $1$,
+        in this way we are sure that the number of iterations performed will be $k$ (the \texttt{counter} goes from $1$ to $k$).
         The code is shown below:
 \begin{lstlisting}[caption={Recursive procedure \texttt{cont-frac}},captionpos=b]
 (define (cont-frac n d k)
   (define (cont-frac-rec k counter) 
     (if (= counter k)
-        (/ (n counter) (d counter))
-        (/ (n counter)
+        (/ (n counter) (d counter)) ; base case
+        (/ (n counter)              ; recursive case
            (+ (d counter) 
               (cont-frac-rec k (+ counter 1))))))
   (cont-frac-rec k 1))
 \end{lstlisting}
         Then it has been tested by approximating $ 1 / \varphi \sim 0.6180 $. When $ k = 11 $ or grater, the approximation is
         accurate to 4 decimals places.
-    \item[b.] Since before the procedure generates a recursive process, it has been rewritten in order to generate an iterative
-        process. The procedure defines the local procedure \texttt{iter} which takes in input the number of iterations to 
-        be performed (\texttt{k}) and partial result computed so far. The idea is to begin from the last fraction (i.e. 
-        $ N_{k} / D_{k} $) and then proceding backward to compute all the other fractions. In particular, the idea is to compute
-        the quantity $ D_{i - 1} + \frac{N_{i}}{Q_{i}} $ where $ Q_{i} $ is the quantity computed so far.
-        Indeed, the procedure \texttt{iter} is called with initial parameters \texttt{k} and $ Q_{k} = D_{k} $, after the first 
-        iteration, the computed value $ Q_{k - 1} = D_{k - 1} + \frac{N_{k}}{D_{k}} $.
+    \item[b.] Since the procedure defined before generates a recursive process, it has been rewritten in order to generate an iterative
+        process. The procedure \texttt{cont-frac-iter} defines the local procedure \texttt{iter} which takes in input the number of
+        iterations to be performed (\texttt{k}) and partial result computed so far. The idea is to begin from the last fraction (i.e. 
+        $ N_{k} / D_{k} $) and then proceed backward to compute all the other fractions. In particular, the idea is to compute
+        the quantity $ D_{i - 1} + \frac{N_{i}}{Q_{i}} $ where $ Q_{i} $ is the amount computed so far.
+        
+        The procedure \texttt{iter} is called with initial parameters \texttt{k} and $ Q_{k} = D_{k} $ and, after the first 
+        iteration, the computed value is $ Q_{k - 1} = D_{k - 1} + \frac{N_{k}}{D_{k}} $.
         In the last step (i.e. $ k = 1 $) the procedure returns the ration $ N_{1} / Q_{1} $ that is exaclty the continued fraction
         to be computed.
-\begin{lstlisting}
+\begin{lstlisting}[caption={Iterative process for the function \texttt{cont-frac}}, captionpos=b]
 (define (cont-frac-iter n d k)
   (define (iter k res)
     (if (= k 1)
@@ -219,9 +223,10 @@ In this fraction, the $ N_{i} $ are all $ 1 $, and the $ D_{i} $ are successivel
 Write a program that uses your \texttt{cont-frac} procedure from Exercise 1.37 to approximate $ e $, based on Euler's expansion.
 
 \paragraph{Solution} 
-The two procedures \texttt{cont-frac} and \texttt{cont-frac-iter} were be used to approximate $ e $ in order to verify that the 
-results matched. The procedure \texttt{euler-number} uses the procedure \texttt{cont-frac} (which generates a recursive process), 
-while the procedure \texttt{euler-number-iter} uses the procedure \texttt{cont-frac-iter}.
+The two procedures \texttt{cont-frac} and \texttt{cont-frac-iter} were used to approximate $ e $. Both were used to verify the 
+correspondence of the results.
+The procedure \texttt{euler-number} uses the procedure \texttt{cont-frac} (which generates a recursive process), while the procedure 
+\texttt{euler-number-iter} uses the procedure \texttt{cont-frac-iter}.
 To get the values of $ N_{k} $ and $ D_{k} $, two procedures have been defined: \texttt{get-n} and \texttt{get-d}. The first one
 is trivial and returns $ 1 $ at each iteration step, while the latter is more complex.
 To get the element of the sequence $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $ it is possible to use the function
@@ -234,7 +239,7 @@ $ seq: \mathbb{N}^{+} \to \mathbb{N}^{+} $ described below:
       1 & \text{otherwise}
   \end{cases} 
 \]
-So we defined the procedures \texttt{get-n} and \texttt{get-d} as follows:
+So the procedures \texttt{get-n} and \texttt{get-d} were defined as follows:
 \begin{lstlisting}[caption={Definition of the procedures \texttt{get-n} and \texttt{get-d}}, captionpos=b]
 (define (get-n i) 1)
 (define (get-d i)
@@ -246,8 +251,8 @@ So we defined the procedures \texttt{get-n} and \texttt{get-d} as follows:
          2)
       (if (<= i 2) i 1)))
 \end{lstlisting}
-Since the sequence of $ D_{i} $ is used to approximate $ e - 2 $, we can approximate $ e $ by approximating $ e - 2 $ and than
-by adding $ 2 $ to the computed quantity. This is the way the procedures \texttt{euler-number} and \texttt{euler-number-iter}
+Since the continued fraction expansion is used to approximate $ e - 2 $, we can approximate $ e $ by approximating $ e - 2 $ and then
+adding $ 2 $ to the computed quantity. This is the way the procedures \texttt{euler-number} and \texttt{euler-number-iter}
 approximate $ e $.
 \begin{lstlisting}
 (define (euler-number k)

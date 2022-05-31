@@ -15,6 +15,7 @@
 \usepackage{float}
 \usepackage{array}
 \usepackage{mathtools}
+\usepackage{textcomp}
 
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
@@ -50,7 +51,8 @@
     % columns=fullflexible,
     xleftmargin = 0.5ex,
     backgroundcolor = \color{lgrey},
-    frame = tb
+    frame = tb,
+    upquote = true
 }
 
 \newtheorem*{proposition}{Proposition}

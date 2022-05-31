@@ -46,9 +46,13 @@
 (define (average x y) 
   (/ (+ x y) 2))
 
-; definition of transformation with average damping, i.e. x ->  (x + log(1000) / log(x)) / 2
+; definition of transformation x -> log(1000) / log(x) with average damping
 (define (log-transformation-avg-dmp x)
-  (average x (log-transformation x)))
+  (fixed-point-print-seq
+   (lambda (y)
+     (average y (log-transformation y)))
+   1.1))
+
 
 ; exercise 1.37
 (define number-of-iterations 11)
