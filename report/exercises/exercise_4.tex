@@ -5,20 +5,21 @@ What are \texttt{(bernoulli-dist p)}, \texttt{(normal-dist $\mu$ $\sigma$)} exac
 (produced in a random way)?
 We have seen that \texttt{flip} is a procedure with a probabilistic behaviour. 
 Is, e.g., \texttt{(normal-dist $\mu$ $\sigma$)} something similar?
-Try to evaluate \texttt{(normal-dist 0 1)}
+Try to evaluate \texttt{(normal-dist 0 1)}.
 
 \paragraph{Solution}
 \texttt{(bernoulli-dist p)} and \texttt{(normal-dist $\mu$ $\sigma$)} are two structures which represent 
 two different distribution, the first one represents the \textit{bernoulli} distribution with success probability $p$; 
-instead, the latter object represents the \textit{normal} distribution with parameters $\mu$ and $\sigma$ as mean and variance.
+instead, the latter object represents the \textit{normal} distribution with parameters $\mu$ and $\sigma$ as mean and
+standard deviation.
 They are not real numbers, they are structures which can be used to generate numbers according to the distribution they represent.
-To generate a sample from a distribution object it necessary to use the procedure \texttt{sample} which takes as argument a 
+To generate a sample from a distribution object it necessary to use the \texttt{sample} procedure which takes as argument a 
 distribution object and returns the generated value.
 
 The procedure \texttt{flip} has a probabilistic behaviour, but it is different from the call \texttt{(normal-dist 0 1)}, indeed, the 
 first one is a procedure which returns the value \texttt{\#t} with probability $0.5$, while the second one is a structure, so the 
-evaluation is different. Since it is a structure, so when the call is done, the interpreter returns a distribution object which
-has as parameters the arguments of the call, e.g. in our case it returns an object which represents a normal distribution with 
+evaluation is different. Since it is a structure, when the call is done, the interpreter returns a distribution object which
+has the arguments of the call as parameters, e.g. in our case it returns an object which represents a normal distribution with 
 $ \mu = 0 $ and $ \sigma = 1 $.
 
 The procedure \texttt{flip} has a similar behaviour to the call \texttt{(sample (bernoulli-dist 0.5))} that is equivalent to the call

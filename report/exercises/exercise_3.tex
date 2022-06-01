@@ -20,7 +20,7 @@ After that a list is created which contains three time the value assigned to the
 \texttt{\#t}, then the list is defined as follows: \texttt{\textquotesingle(\#t \#t \#t)}; otherwise the created list is:
 \texttt{\textquotesingle(\#f \#f \#f)}.
 
-In the second program, we a new procedure called \texttt{foo} is defined which is a wrapper for the procedure \texttt{flip}. This means
+In the second program, we a new procedure called \texttt{foo} is defined which is a wrapper for the \texttt{flip} procedure. This means
 that whenever the procedure \texttt{foo} is called, also \texttt{flip} is called.
 Therefore, when defining the list, the expression \texttt{flip} is evaluated three times and, since it is a non-deterministic 
 procedure, the three elements of the list can be different.
@@ -79,16 +79,17 @@ Here are four expressions you could evaluate using this modified model:
         \begin{lstlisting}[caption={Body of procedure \texttt{winner} with actual parameters}, captionpos=b]
 (if (< (total-pulling '(alice)) (total-pulling '(bob)))
     '(bob)
-    '(alice)))  
+    '(alice))
         \end{lstlisting}
         The following step is to evaluate the conditional expression, so it starts by evaluating the \textit{predicate}: 
-        \texttt{(< (total-pulling \textquotesingle(alice)) (total-pulling \textquotesingle(bob)))}. The interpreter has to deal with the primitive predicate
-        \texttt{<}, so it needs to evaluate the arguments and then it applies the predicate to the evaluated arguments.
-        The first argument to evaluate is \texttt{(total-pulling \textquotesingle(alice))}: the body of the procedure \texttt{total-pulling} 
-        is retrieved in the \textit{global environment} and the expression is substituted by the body of the procedure, 
-        then the actual parameter is applied to the body of the procedure. The expression \texttt{(total-pulling \textquotesingle(alice))} becomes
-        as follows:
-        \begin{lstlisting}[caption={Body of procedure \texttt{total-pulling} with actual parameters}, captionpos=b, label={lst:t-p}]
+        \texttt{(< (total-pulling \textquotesingle(alice)) (total-pulling \textquotesingle(bob)))}. 
+        The interpreter has to deal with the primitive predicate ``\texttt{<}'', so it has to evaluate the arguments and then 
+        it has to apply the predicate to the evaluated arguments.
+        The first argument to evaluate is \texttt{(total-pulling \textquotesingle(alice))}: the body of the \texttt{total-pulling} procedure 
+        is retrieved in the \textit{global environment} and the expression is substituted by the body of the procedure.
+        Afterwards the actual parameter is applied to the body of the procedure and the expression 
+        \texttt{(total-pulling \textquotesingle(alice))} becomes as follows:
+        \begin{lstlisting}[caption={Body of procedure \texttt{total-pulling} with actual parameters \texttt{\textquotesingle(alice)}}, captionpos=b, label={lst:t-p}]
 (sum
  (map (lambda (person) (if (lazy person)
                            (/ (strength person) 2)
@@ -96,8 +97,8 @@ Here are four expressions you could evaluate using this modified model:
       '(alice)))
         \end{lstlisting}
         The procedure \texttt{sum} takes as argument a list of numbers and returns the sum over the elements of the list. In this case
-        the argument of the procedure is another expression, so the interpreter has to evaluate the argument and then it has to apply
-        it to the procedure \texttt{sum}.
+        the argument of the procedure is another expression, so the interpreter has to evaluateit and then apply it to the \texttt{sum}
+        procedure.
         Now the expression to be evaluated is the following:
         \begin{lstlisting}[caption={Argument of procedure \texttt{sum} in Listing~\ref{lst:t-p}}, captionpos=b, label={lst:map}]
 (map (lambda (person) (if (lazy person)
@@ -105,7 +106,7 @@ Here are four expressions you could evaluate using this modified model:
                           (strength person)))
      '(alice))
         \end{lstlisting}
-        The procedure \texttt{map} takes as arguments a \textit{lambda} expression and a list. The procedure applies the
+        The \texttt{map} procedure takes as arguments a \textit{lambda} expression and a list. The procedure applies the
         \textit{lambda} expression to each element of the list and returns the list of the results of the \textit{lambda}
         expression on the elements of the list in input.
         So the first step consists of evaluating the \textit{lambda} expression with argument \texttt{\textquotesingle alice}. 
@@ -127,21 +128,21 @@ Here are four expressions you could evaluate using this modified model:
         We suppose that the result of the call \texttt{(flip 1/3)} is \texttt{\#f}, so the result of the evaluation of the
         \textit{predicate} in the conditional expression is \texttt{\#f}. Since the \textit{predicate} is false, the interpreter has
         to evaluate the \textit{alternative} expression \texttt{(strength \textquotesingle alice)}.
-        It is a procedure call, so the interpreter has to retrieve the body of the procedure and then to substitute the formal
+        It is a procedure call, so the interpreter has to retrieve the body of the procedure and then substitute the formal
         parameter by the actual one.
         The result is that the interpreter now has to evaluate the following expression:
         \begin{lstlisting}[caption={Body of procedure \texttt{strength} when evaluating Listing~\ref{lst:lambda-body}}, captionpos=b]
 (if (flip) 5 10)
         \end{lstlisting}
-        The procedure \texttt{strength} is a particular type of procedure, indeed, it is memoized through the procedure \texttt{mem}.
+        The \texttt{strength} procedure is a particular type of procedure, indeed, it is memoized through the \texttt{mem} procedure.
         This means that the first time the procedure is called, the result of the call is memorized and each time the procedure is
-        called with same the same argument, the interpreter does not evaluate the function, but it retireves the already computed
+        called with the same argument, the interpreter does not evaluate the function, but it retireves the already computed
         result in the \textit{global environment}. This is the first time that \texttt{(strength \textquotesingle alice)} is evaluated, 
         so the procedure has to be evaluated in a ``standard'' way.
-        The body of the procedure is composed by a conditional expression, the procedure \texttt{flip} is evaluated and we suppose
+        The body of the procedure is composed by a conditional expression, the \texttt{flip} procedure is evaluated and we suppose
         that the result is \texttt{\#t}, so the procedure \texttt{strength} returns the value $5$.
 
-        Thus, the expression \texttt{(strength \textquotesingle alice)} is evaluated with $5$; since the second argument of the procedure \texttt{map}
+        Thus, the expression \texttt{(strength \textquotesingle alice)} is evaluated with $5$; since the second argument of the \texttt{map} procedure
         is a list with only one argument (i.e. \texttt{\textquotesingle alice}) the result is a list with only one element (i.e. $5$).
         This list is the argument of the procedure \texttt{sum} and the interpreter has to evaluate the following expression:
         \begin{lstlisting}[caption={Expression to be evaluated after evaluating the expression in Listing~\ref{lst:map}}, captionpos=b]
@@ -154,11 +155,11 @@ Here are four expressions you could evaluate using this modified model:
         \texttt{(total-pulling \textquotesingle (alice))}, but, since there are some probabilistic cases, the result can be different. In particular,
         we suppose that the evaluation of \texttt{(lazy \textquotesingle bob)} returns the value \texttt{\#t}, so the interpreter has to evaluate the
         expression \texttt{(/ (strength \textquotesingle bob) 2)} instead of \texttt{(strength \textquotesingle bob)}. The interpreter has to evaluate a primitive
-        procedure, so it has to evaluate first the operands and then to apply the operator to them.
+        procedure, thus it has to evaluate first the operands and then to apply the operator to them.
         We suppose that the evaluation of \texttt{(strength \textquotesingle bob)} returns the value $5$. It is important to notice that it is the
-        first time that the procedure \texttt{strength} is called with actual parameter \texttt{\textquotesingle bob}, so the evaluation is
+        first time that the \texttt{strength} procedure is called with actual parameter \texttt{\textquotesingle bob}, so the evaluation is
         ``standard'' and the result of the call is memorized in the \textit{global environment}. 
-        So the expression \texttt{(/ (strength \textquotesingle bob) 2)} is evaluated with $2.5$.
+        Therefore the expression \texttt{(/ (strength \textquotesingle bob) 2)} is evaluated with $2.5$.
 
         Now the situation is represented in the following way:
         \begin{lstlisting}[caption={Expression to be evaluated after evaluating \texttt{(total-pulling \textquotesingle bob)}}, captionpos=b]
@@ -172,7 +173,7 @@ Here are four expressions you could evaluate using this modified model:
 
         \paragraph*{Expression 2} \texttt{(equal? \textquotesingle(alice) (winner \textquotesingle(alice) \textquotesingle(bob)))}
 
-        The predicate \texttt{equal?} returns \texttt{\#t} when the two arguments are euqal, it return \texttt{\#f} otherwise, so
+        The predicate \texttt{equal?} returns \texttt{\#t} when the two arguments are euqal, it returns \texttt{\#f} otherwise, so
         the interpreter has to evaluate the two \textit{operands} and then to compare them. The first \textit{operand} is a quoted
         data object, so it is a list which contains the symbol \texttt{\textquotesingle alice}. The evaluation of the second \textit{operand} is
         identical to the evaluation of \textit{expression 1}.
@@ -180,12 +181,12 @@ Here are four expressions you could evaluate using this modified model:
         Since there are some probabilistic procedures which have to be evaluated, the result of the evaluation could be different 
         from the previous one. In particular we suppose that in this case the call \texttt{(lazy \textquotesingle alice)} returns \texttt{\#f} and 
         the call \texttt{(lazy \textquotesingle bob)} returns \texttt{\#f}.
-        Since the procedure \texttt{strength} is memoized, the calls \texttt{(strength \textquotesingle alice)} and \texttt{(strength \textquotesingle bob)} return
+        Since the \texttt{strength} procedure is memoized, the calls \texttt{(strength \textquotesingle alice)} and \texttt{(strength \textquotesingle bob)} return
         the same values as before, i.e. both the calls return the value $5$.
         
-        The two teams \texttt{\textquotesingle (alice)} and \texttt{\textquotesingle (bob)} have the same value (i.e $5$) returned by the procedure 
-        \texttt{total-pulling}, so the evaluation of the procedure \texttt{winner} returns \texttt{\textquotesingle (alice)}.
-        Since the two arguments of the predicate \texttt{equal?} are equal, the evaluation of \textit{expression 2} is \texttt{\#t}.
+        The two teams \texttt{\textquotesingle(alice)} and \texttt{\textquotesingle(bob)} have the same strength (i.e $5$), 
+        therefore the evaluation of the \texttt{winner} procedure returns \texttt{\textquotesingle (alice)}.
+        Given that the two arguments of the predicate \texttt{equal?} are equal, the evaluation of \textit{expression 2} is \texttt{\#t}.
 
 
         \paragraph*{Expression 3} The \textit{expression 3} is the following one: 
@@ -194,17 +195,17 @@ Here are four expressions you could evaluate using this modified model:
      (equal? '(alice) (winner '(alice) '(fred))))
         \end{lstlisting}
 
-        The logical composition \texttt{and} of the two predicates \texttt{equal?} is evaluated by first evaluating the first operand.
+        The logical composition \texttt{and} is evaluated by first evaluating the first operand.
         If the evaluation returns \texttt{\#t}, then the second operand is evaluated; if it is \texttt{\#t}, then is evaluated the 
         third one (if present) and so on and so forth.
         If all the values of the operands are \texttt{\#t}, then the evaluation of the expression is \texttt{\#t}, otherwise when
-        one operand is evaluated as \texttt{\#f}, then the expression is evaluated as \texttt{\#f} and the follwing operands are not
+        one operand is evaluated as \texttt{\#f}, the expression is evaluated as \texttt{\#f} and the follwing operands are not
         evaluated.
         
         So the interpreter evaluates the first \texttt{equal?} expression and the evaluation is the same as the previous case.
-        We suppose now that \texttt{\textquotesingle alice} is \textit{lazy} and \texttt{\textquotesingle bob} is not \textit{lazy}. In this case the procedure
-        \texttt{winner} returns the value \texttt{\textquotesingle (bob)}, so the evaluation of the first operand returns the value \texttt{\#f} since
-        \texttt(\textquotesingle (alice)) is different from \texttt(\textquotesingle (bob)).
+        We suppose now that \texttt{\textquotesingle alice} is \textit{lazy} and \texttt{\textquotesingle bob} is not \textit{lazy}.
+        In this case the \texttt{winner} procedure returns the value \texttt{\textquotesingle (bob)}, so the evaluation of the first 
+        operand returns the value \texttt{\#f}.
         Thus the evaluation of the \texttt{and} is stopped and the returned value is \texttt{\#f}.
 
 
@@ -216,22 +217,23 @@ Here are four expressions you could evaluate using this modified model:
 
         We have already dissussed in detail about the evaluation of the procedures and predicates in this expression, so the main
         argumentation concerns the results of the evaluation of the \textit{expression 4}.
-        Let us suppose that \texttt{\textquotesingle alice} is not \textit{lazy} and \texttt{\textquotesingle bob} is \textit{lazy}. The first argument of the
-        \texttt{and} predicate is \textit{true}, so the interpreter has to evaluate the second expression.
+        Let us suppose that \texttt{\textquotesingle alice} is not \textit{lazy} and \texttt{\textquotesingle bob} is \textit{lazy}. 
+        The first argument of the \texttt{and} predicate is \textit{true}, so the interpreter has to evaluate the second expression.
         
-        Since both the calls \texttt{(strength \textquotesingle jane)} and \texttt{(strength \textquotesingle fred)} have been evaluated, their evaluation is 
-        happens in a ``standard'' way and their values are memorized into the \textit{global environment}.
+        Since both the calls \texttt{(strength \textquotesingle jane)} and \texttt{(strength \textquotesingle fred)} have never been evaluated, 
+        their evaluation happens in a ``standard'' way and their values are memorized into the \textit{global environment}.
         Let us suppose both \texttt{\textquotesingle jane} and \texttt{\textquotesingle fred} are strong, so the value returned by the procedure \texttt{strength}
-        is $10$ and we suppose that the evaluation of \texttt{(lazy \textquotesingle jane)} is \texttt{\#f} and the evaluation of 
+        is $10$. Now let us suppose that the evaluation of \texttt{(lazy \textquotesingle jane)} is \texttt{\#f} and the evaluation of 
         \texttt{(lazy \textquotesingle fred)} is \textit{ture}.
 
-        Thus the evaluation of \texttt{(winner \textquotesingle(jane) \textquotesingle(fred))} returns \texttt{\textquotesingle(jane)} which is equal to the first argument of the
-        predicate \texttt{equal?}. Since both the operands of the \texttt{and} predicate are \textit{true}, the evaluation of the
-        \textit{expression 4} is \texttt{\#t}.
+        Therefore the evaluation of \texttt{(winner \textquotesingle(jane) \textquotesingle(fred))} returns \texttt{\textquotesingle(jane)} 
+        which makes \textit{true} the second expression \texttt{equal?}. 
+        Since both the operands of the \texttt{and} predicate are \textit{true}, the evaluation of the \textit{expression 4} is 
+        \texttt{\#t}.
 
     \item[b.] To compute the probability for each possible return value from each expression it has been decided that the execution
-        of the four expressions is sequential, thus it is necessary to make some assumption when the procedure \texttt{strength} is
-        called, indeed, it is a memoized procedure, so the first evaluation influences the following calls.
+        of the four expressions is sequential. For this reason, it is necessary to make some assumption when the procedure \texttt{strength} is
+        called, since it is a memoized procedure. This means that the first evaluation influences the following calls.
 
         \paragraph*{Expression 1} When the interpreter has to evaluate this first expression, the procedure \texttt{strength} has never 
         called before for both \texttt{\textquotesingle alice} and \texttt{\textquotesingle bob}, so they can assume either the value $5$ or $10$ after evaluating
@@ -239,8 +241,8 @@ Here are four expressions you could evaluate using this modified model:
         $16$ combinations of values that the two teams can assume.
         In particular, it is possible to build a table whose rows and columns are composed by all the possible combinations of
         the outcomes of the probabilistic procedures \texttt{strength} and \texttt{lazy}, in particular
-        the rows are all the possible outcomes of these procedures for one team (i.e. \texttt{\textquotesingle (alice)}), 
-        while the columns are all the possible outcomes of these procedures for the other team (i.e. \texttt{\textquotesingle (bob)}).
+        the rows are all the possible outcomes of the evaluations of the procedures for one team (i.e. \texttt{\textquotesingle (alice)}), 
+        while the columns are all the possible outcomes of the evaluations of the procedures for the other team (i.e. \texttt{\textquotesingle (bob)}).
         Each cell of the table contains the probability to get that particular case. The computed probability are shown
         in Table~\ref{tab:exp-1}.
         The table shows all the possible combinations of values that \texttt{\textquotesingle alice} and \texttt{\textquotesingle bob} can get, the cells coloured
@@ -248,7 +250,7 @@ Here are four expressions you could evaluate using this modified model:
         where \texttt{\textquotesingle bob} wins.
 
         Thus to compute the probability that \texttt{\textquotesingle (alice)} wins it is sufficient to sum all the probabilities coloured in Violet,
-        while to compute the probability that \texttt{\textquotesingle (bob)} wins it is sufficient to summ all the probabilities coloured in Orange.
+        while to compute the probability that \texttt{\textquotesingle (bob)} wins it is sufficient to sum all the probabilities coloured in Orange.
         The result is the following:
         \[ P(winner = alice) = 25 / 36 \]
         \[ P(winner = bob) = 11 / 36 \]
@@ -285,7 +287,7 @@ Here are four expressions you could evaluate using this modified model:
      
         \paragraph*{Expression 2} Since the procedure \texttt{strength} is memoized, the results of the evaluation of the previous
         expression influences the the probability for each possible outcome of this expression.
-        In particular, the values of the strength of both \texttt{\textquotesingle alice} and \texttt{\textquotesingle bob} are fixed, so the probabilistic
+        In particular, the values of the strength of both \texttt{\textquotesingle alice} and \texttt{\textquotesingle bob} are fixed, thus the probabilistic
         behaviour of the evaluation of this expression depends only on the result of the procedure \texttt{lazy}, so the table
         of probabilities has less entries.
 
@@ -297,7 +299,7 @@ Here are four expressions you could evaluate using this modified model:
         The Table~\ref{tab:exp-2} represents the different probabilities of all possible cases: also in this case, the cells coloured
         in Violet are the ones where \texttt{\textquotesingle alice} wins. The result is the following:
         \[ P(winner = alice\;|\;strength(alice) = 5 \land strength(bob) = 5) = 7/9 \]
-        Thus the probability that the \textit{expression 2} returns the value \texttt{\#t} is $7/9$ and the probability that it
+        The probability that the \textit{expression 2} returns the value \texttt{\#t} is $7/9$ and the probability that it
         returns the value \texttt{\#f} is $2/9$.
         \begin{table}[H]
             \centering
@@ -330,12 +332,13 @@ Here are four expressions you could evaluate using this modified model:
         team (i.e. \texttt{\textquotesingle (fred)}) has not any assigned value to the \textit{strength}.
 
         It is important to remeber that the second operand is not interpreted if the first one is evaluated as \texttt{\#f}, but this
-        fact does not influence the probabilities of the outcomes of this expression, it will influence the probabilities of the
+        fact does not influence the probabilities of the outcomes of this expression, it could affect the probabilities of the
         \textit{expression 4}.
 
         The expression can be divided in two independent parts: the first one is the match between \texttt{\textquotesingle (alice)} and 
-        \texttt{\textquotesingle (bob)} and the second part is the match between \texttt{\textquotesingle (alice)} and \texttt{\textquotesingle (fred)}. Thus it is possible
-        to compute the probabilities of these parts and then multiply them to get the final probability.
+        \texttt{\textquotesingle (bob)} and the second part is the match between \texttt{\textquotesingle (alice)} and \texttt{\textquotesingle (fred)}. 
+        Since these two parts are independent, it is possible to compute the probabilities of these parts and then multiply them to
+        get the final probability.
         
         The first probability to compute is euqal to the probability of \textit{expression 2}, so we can refer to the 
         Table~\ref{tab:exp-2} and the probability to get the value \textit{true} is $7/9$.
@@ -373,8 +376,9 @@ Here are four expressions you could evaluate using this modified model:
         \end{table}
 
         The result is that the probability that the second part of the expression is evaluated with \textit{true} is $1/2$, indeed,
-        it is returned \texttt{\#t} when \texttt{\textquotesingle (alice)} wins against \texttt{\textquotesingle (fred)}. Thus we can compute the final probability
-        by multipling the probabilities of the two parts. Thus it results that the probability to get the value \texttt{\#t} is
+        it is returned \texttt{\#t} when \texttt{\textquotesingle (alice)} wins against \texttt{\textquotesingle (fred)}. 
+        As said before, it is possible to compute the final probability by multipling the probabilities of the two parts. 
+        Thus it results that the probability to get the value \texttt{\#t} is
         $7/9\;\cdot\;1/2 = 7/18$. While the probability to get the value \texttt{\#f} is given by 
         $P(outcome = false\;|\;strength(alice) = strength(bob) = 5) = 1 - 7/18 = 11/18$.
         
@@ -384,12 +388,12 @@ Here are four expressions you could evaluate using this modified model:
         Otherwise the probabilities to compute are conditioned only by the values assigned to the \textit{strength} of \texttt{\textquotesingle alice}
         and \texttt{\textquotesingle bob}.
 
-        Let us suppose that the resutl of the first part of the previous expression is \texttt{\#f}, so the second part has not been
+        Let us suppose that the result of the first part of the previous expression is \texttt{\#f}, so the second part has not been
         evaluated and the value of the \textit{strength} of \texttt{\textquotesingle fred} is not fixed.
         The computation of the probabilities for this expression is similar to the previous one, indeed, there are two independent
         parts logically connected by the \texttt{and} predicate. The first part is equal to the \textit{expression 2} 
         (Table~\ref{tab:exp-2}), while the second part is equivalent to the \textit{expression 1}, since both \texttt{\textquotesingle jane} and
-        \texttt{\textquotesingle fred} have never been uesd as parameter of the procedure \texttt{strength}.
+        \texttt{\textquotesingle fred} have never been uesd as parameter of the \texttt{strength} procedure.
         The Table~\ref{tab:exp-4} represents all the possible cases of the second part of this expression and it is equal to
         the Table~\ref{tab:exp-1}. The table is shown for greater clearly. 
         \begin{table}[H]
@@ -432,10 +436,11 @@ Here are four expressions you could evaluate using this modified model:
         teams (i.e. \texttt{\textquotesingle (alice)} and \texttt{\textquotesingle (bob)}) and it can happen that it is assigned also to \texttt{\textquotesingle fred}. In this case
         the probability of \textit{expression 4} might turn out equal to the probability computed for \textit{expression 3}, indeed,
         if the strength of \texttt{\textquotesingle alice} is equal to the strength of \texttt{\textquotesingle fred}, then the two probabilities are equal.
+        
         Quite the opposite, if the second part of the \textit{expression 3} is not evaluated (i.e. as happened in points \textit{a}
         and \textit{b}) the two probabilities are different because in \textit{expression 3} the second part is a conditional
-        probability, while in \textit{expression 4} the second part is not a conditional probability because the values of the
-        strength of \texttt{\textquotesingle jane} and \texttt{\textquotesingle fred} are not evaluated.
+        probability, while in \textit{expression 4} the second part is not a conditional probability, i.e. the \texttt{strength}
+        procedure has never been evaluated with arguments \texttt{\textquotesingle jane} and \texttt{\textquotesingle fred}.
 
         In conclusion, the probabilities of \textit{expression 3} and \textit{expression 4} can be equal or different, they depend
         on the probabilistic behaviour of the procedures \texttt{lazy} and \texttt{strength}.
@@ -458,9 +463,9 @@ independent, the probability of getting five consecutive \textit{false} results 
 \[ P(geometric = 5) = (1 - p)^{5} \cdot p \]
 The formula comes from the fact that the probability of getting a \textit{true} value from the procedure \texttt{flip} is given by
 $p$, so the probability of getting a \textit{false} value from \texttt{flip} is $ (1 - p) $.
-So the procedure \texttt{geometric} computes the number of trials needed to get the first occurence of success (i.e. \texttt{\#t}).
+Therefore, the procedure \texttt{geometric} computes the number of trials needed to get the first occurence of success (i.e. \texttt{\#t}).
 Each trial has the same probability of success $p$.
-For this reason the computed probability is equivalent to the geometric distribution with success probability $p$ and with the 
+For this reason, the computed probability is equivalent to the geometric distribution with success probability $p$ and with the 
 first occurence of success at the sixth trial.
 
 To check the formula, some samples have been generated in order to approximate the probability to get five consecutive 
@@ -559,8 +564,9 @@ The \texttt{a-b-model} defines first the variable \texttt{a} which has probabili
 this probability can be computed by adding the last two rows of the Table~\ref{tab:es3-7}, indeed, the value of \texttt{A} in
 the first two rows is \textit{false}, while in the last two is \textit{true}.
 Then the probability of the variable \texttt{b} depends on the value of the variable \texttt{a}, indeed, if \texttt{A} is 
-\textit{false}, then the probability that \texttt{B} is \textit{true} $ \frac{0.06}{0.06 + 0.14} = 0.3 $; while if
-\texttt{A} is \textit{true}, then la probability that \texttt{B} is true is $ 0.5 $.
+\textit{false}, then the probability that \texttt{B} is \textit{true} $ \frac{0.06}{0.06 + 0.14} = 0.3 $ (Only the rows of the table
+in which \texttt{A} is \textit{false} are considered); while if \texttt{A} is \textit{true}, then the probability that \texttt{B}
+is true is $ 0.5 $.
 
 \begin{figure}[h]
     \centering

@@ -34,7 +34,7 @@ distribution; that $ c_{P} $ is a stochastic matrix; and that $ P_{c_{P}} = P $ 
    On the other hand, we need to prove that $c_{P}$ is a distribution. We can procede as before: we have defined $c_{P}$ as
    $ c_{P}(x_{i})(x_{j}) = P(i, j)$, thus it is possible to write the follwing equality:
    \[ \forall i.\;\sum_{j} c_{P}(x_{i})(x_{j}) = \sum_{j} P(i, j) = 1 \]
-   because $P$ is a stochastic matrix, so each row of the matrix gives a distribution, thus the sum of the elements of each row is
+   because $P$ is a stochastic matrix, so each row of the matrix gives a distribution, therefore the sum of the elements of each row is
    equal to $1$.
 \end{proof}
 
@@ -60,17 +60,19 @@ The notation is slightly different from the one of the instructions, since I do 
 written. Indeed, the goal is to make clear that the summation is defined over all the states of the \textit{state space} and that
 the only addend that is not null is the one for which the value of $\delta_{x_{x}}(x_{i}) = 1$ (i.e. for $x_{k}$).
 
-
+\clearpage
 \subsection*{Exercise 7 (3)}
 \textit{Prove that $ c^{*}(\psi) = \psi(P_{c}) $.}
 
 \paragraph{Solution}
 The product $\psi P_{c}$ returns a vector of dimension $(1, n)$ where $n$ is the number of states. 
-Furthermore it is important to remember that: \textit{(i)} The matrix $ P_{c} $ has been defined as $ P_{c}(i, j) = c(x_{i})(x_{j}) $;
-\textit{(ii)} The map $c^{*}$ has been defined as follows: $ c^{*}(\phi)(y) = \sum_{x} \phi(x) c(x)(y) $.
+Furthermore it is important to remember that: \textit{(i)} the matrix $ P_{c} $ has been defined as $ P_{c}(i, j) = c(x_{i})(x_{j}) $;
+\textit{(ii)} the map $c^{*}$ has been defined as follows: $ c^{*}(\phi)(y) = \sum_{x} \phi(x) c(x)(y) $.
 Thus we can write the following equality:
 \[ \forall y.\;(\psi P_{c})(y) = \sum_{x} \psi(x) \cdot P_{c}(x, y) \forone \sum_{x} \psi(x) c(x)(y) \fortwo c^{*}(\psi)(y) \]
 Since this holds forall $y$, then we can assert that $c^{*}(\psi) = \psi P_{c}$.
+The first equality comes from the fact that we are selecting the element $y$ of the product $\psi P_{c}$, therefore it is
+equivalent to compute the dot product between the vector $\psi$ and the column $y$ of the matrix $P_{c}$.
 
 
 \subsection*{Exercise 7 (4)}

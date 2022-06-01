@@ -7,12 +7,12 @@
 The developed program is written in Church and it is memorized in the file \textit{exercise\_5.rkt}. This file is a Racket file, but 
 the code is written in Church, so to be executed it is necessary to use a Church interpreter.
 
-The answers to the questions are shown below:
+The answers to the questions are written below:
 \begin{itemize}
     \item[A.] The posterior probability $P(h\;|\;\text{win})$ is the conditional probability that the machine randomly gives to Bob
         a specific letter knowing that Bob has won. In particular, the fact that Bob has won is called \textit{evidence} and it is all
-        we kwnow. The posterior probability can be computed with the Bayes' theorem by knowing: \textit{(i)} the conditional 
-        probability $P(win\;|\;\text{h})$ (or \textit{likelihood}); \textit{(ii)} The prior probability $P(h)$ and 
+        we kwnow. The posterior probability can be computed by the Bayes' theorem by knowing: \textit{(i)} the conditional 
+        probability $P(win\;|\;\text{h})$ (or \textit{likelihood}); \textit{(ii)} the prior probability $P(h)$ and 
         \textit{(iii)} the marginal probability $P(win)$.
         In particular it is proven that:
         \[ P(h\;|\;\text{win}) = \frac{P(win\;|\;\text{h}) \cdot P(h)}{P(win)}\]
@@ -22,7 +22,7 @@ The answers to the questions are shown below:
         the position of the letter in the alphabet. Then the numerator of the formula of the Bayes' theorem is computed.
         To compute the marginal probability $P(win)$ the following formula has be used:
         \[ P(win) = \sum_{h} P(win\;|\;\text{h}) \cdot P(h)\]
-        Then the posterior probability has been computed for each hypothesis by using the Bayes' theorem and the results are shown
+        After that the posterior probability has been computed for each hypothesis by using the Bayes' theorem and the results are shown
         in Table~\ref{tab:casino-game}.
         \begin{table}[H]
             \centering
@@ -77,20 +77,20 @@ The answers to the questions are shown below:
     \item[C.] The procedure \texttt{my-list-index} takes in input 3 parameters: \textit{(i)} \texttt{needle} that is an object, 
         which can be a number, a list, a quoted symbol or something else; \textit{(ii)} \texttt{haystack} that is a list containing zero 
         or more elements; \textit{(iii)} \texttt{counter} that is a number. 
-        The procedure then returns \texttt{'error} if the first argument is not present in the second argument, otherwise it returns the
-        third argument (i.e. the number) incremented by the position of the first argument in the list; the position is considered to be
-        zero-based, so the first element of the list has index $0$, thus if the \texttt{needle} is in the first position of the list 
-        \texttt{haystack}, then the third argument is not incremented. If the \texttt{counter} has value $0$ when the procedure is 
+        The procedure then returns \texttt{\textquotesingle error} if \texttt{needle} is not present in \texttt{haystack}, otherwise it returns the
+        third argument (i.e. the number) incremented by the position of the \texttt{needle} in the list; the position is considered to be
+        zero-based, so the first element of the list has index $0$, therefore if the \texttt{needle} is in the first position of the list 
+        \texttt{haystack}, then the \texttt{counter} is not incremented. If the \texttt{counter} has value $0$ when the procedure is 
         called, then the procedure returns the position zero-based of the \texttt{needle} (if present), instead, if the value of the
         \texttt{counter} is $1$, then the procedure returns the position one-based of the \texttt{needle} in the \texttt{haystack}.
     
-    \item[D.] The procedure \texttt{multinomial} takes in input two lists: the first one is a list of possible outcomes, instead the 
+    \item[D.] The procedure \texttt{multinomial} takes in input two lists: the first one is a list of possible outcomes, whereas the 
         second one is the list of the weights associated to the outcomes in the first list. In particular, the higher is the weight
-        of one element with respect to the weights of the other elements, the higher is the probability to get that particular
-        element. Indeed, the probability to get the element a specific element is given by the following formula:
+        of one element relative to the weights of the other elements, the higher is the probability to get that specific
+        element. Indeed, the probability to get the element at a specific position $i$ is given by the following formula:
         \[ P(e_{i}) = \frac{weight(e_{i})}{\sum_{j} weight(e_{j})} \]
         where $e_{i}$ and $e_{j}$ are the elements of the first list and the function \textit{weight} returns the weight associated
-        to the argument (i.e. the element of the second list which is in the same position of the element in the first list).
+        to the element (i.e. the weight of the second list which is in the same position of the element in the first list).
 
         To implement the distribution of Table~\ref{tab:casino-game} with the procedure \texttt{multinomial}, two lists have been
         defined: \textit{(i)} \texttt{x} which contains all the possible outcomes and \textit{(ii)} \texttt{x-weights} which contains
@@ -156,7 +156,7 @@ The answers to the questions are shown below:
         \end{lstlisting}
         The approximate distribution is shown in Figure~\ref{fig:casino-game-e}. It is possible to observe that the computed
         probabilities are similar to the probabilities manually computed and that the letter with higher posterior probability
-        it the letter \textit{b}. This means that when we know that Bob has won, then it is more likely that he has received the
+        is the letter \textit{b}. This means that when we know that Bob has won, then it is more likely that he has received the
         letter \textit{b} by the machine.
         \begin{figure}[ht!]
             \centering

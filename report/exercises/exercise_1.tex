@@ -10,7 +10,7 @@ describe the behaviour of the following procedure:
 \end{lstlisting}
 
 \paragraph{Solution}
-The procedure \texttt{a-plus-abs-b} defined above takes in input 2 parameters and returns the sum $ a + |b| $. 
+The \texttt{a-plus-abs-b} procedure defined above takes in input 2 parameters and returns the sum $ a + |b| $. 
 The formal parameters of the fuction are \texttt{a} and \texttt{b}, while the body of the fuction is composed by a 
 a compound expression. The operator of the expression is also a compound expression, indeed, it depends on the value of the
 parameter \texttt{b}. In particular, if the value of \texttt{b} is greater than zero, then a sum between the operands is performed,
@@ -62,7 +62,7 @@ In applicative-order evaluation, when a procedure is called, the arguments are f
 procedure; whereas in normal-order evaluation the arguments are not evaluated before the procedure call, but they are evaluated
 when the body of the function is evaluated.
 In this example, an interpreter which uses applicative-order evaluation evaluats the arguments first, so it evaluates \texttt{0} 
-(nothing to do) and \texttt{(p)} which causes a loop, indeed, the procedure \texttt{p} calls itself and it does not terminate.
+(nothing to do) and \texttt{(p)} which causes a loop, indeed, the \texttt{p} procedure calls itself and it does not terminate.
 On the other side, an interpreter which uses normal-order evaluation does not evaluate the arguments before the evaluation of
 the body of the function, but it passes them without any computation step. In this case the procedure call \texttt{(test 0 (p))}
 returns the value \texttt{0}, indeed, the interpreter evaluates the conditional expression and, since the formal parameter \texttt{x}

@@ -39,9 +39,9 @@ we obtain:
 ; definition of golden ratio
 (define phi (/ (+ 1 (sqrt 5)) 2))
 \end{lstlisting}
-The procedure \texttt{fixed-point} is used to compute the \textit{golden ratio} and, as shown below, we can observe that the procedure
-\texttt{fixed-point} computes $ \varphi $ with a good level of approximation.
-\begin{lstlisting}[caption={Racket console which shows the result of the procedure \texttt{fixed-point} and the value of $\varphi$}, 
+The \texttt{fixed-point} procedure is used to compute the \textit{golden ratio} and, as shown below, we can observe that the
+\texttt{fixed-point} procedure computes $ \varphi $ with a good level of approximation.
+\begin{lstlisting}[caption={Racket console which shows the result of the \texttt{fixed-point} procedure and the value of $\varphi$}, 
   captionpos=b]
 > (fixed-point transformation 1.1)
 1.6180364726455159
@@ -58,7 +58,7 @@ Compare the number of steps this takes with and without average damping.
 (Note that you cannot start \texttt{fixed-point} with a guess of $ 1 $, as this would cause division by $ \log(1) = 0 $).
 
 \paragraph{Solution} 
-First of all the procedure \texttt{fixed-point} has been modified in order to print the sequence of approximations it generates.
+First of all the \texttt{fixed-point} procedure has been modified in order to print the sequence of approximations it generates.
 The instructions \texttt{(display guess)} and \texttt{(newline)} are inserted in the local procedure \texttt{try} in order to be
 able to print all the guesses.
 \begin{lstlisting}[caption={Procedure \texttt{fixed-point} which prints the sequence of approximations it generates},captionpos=b]
@@ -87,7 +87,7 @@ Then the transformation $ x \mapsto \frac{\log(1000)}{\log(x)} $ has been define
 (define (log-transformation-avg-dmp x)
   (average x (log-transformation x)))
 \end{lstlisting}
-The procedure \texttt{log-transformation-avg-dmp} calls the procedure \texttt{average} which takes in input two numbers and returns the
+The \texttt{log-transformation-avg-dmp} procedure calls the \texttt{average} procedure which takes in input two numbers and returns the
 arithmetic mean between the two arguments and it is defined as follows:
 \begin{lstlisting}
 ; definition of procedure which computes the average
@@ -170,7 +170,7 @@ the approximation with average damping takes $ 13 $ steps.
 
 \paragraph{Solution}
 \begin{itemize}
-    \item[a.] The procedure \texttt{cont-frac} has been defined with a recursive process. The function has 3 parameters: \textit{(i)}
+    \item[a.] The \texttt{cont-frac} procedure has been defined with a recursive process. The function has 3 parameters: \textit{(i)}
         \texttt{n} which is the function that returns the element $ N_{i} $ of the continued fraction; \textit{(ii)} \texttt{d}
         which is the function that returns the element $ D_{i} $ of the continued fraction; \textit{(iii)} \texttt{k} which is the
         number of iterations to be performed.
@@ -178,10 +178,10 @@ the approximation with average damping takes $ 13 $ steps.
         computing recursivly the continued fraction. It has two formal parameters: \texttt{k} and \texttt{counter} which is the 
         counter of the performed iterations; when the \texttt{counter} reaches \texttt{k} (i.e. the number of iterations to be
         performed) the base case is reached and the returned value is computed.
-        The procedure \texttt{cont-frac} calls the procedure \texttt{cont-frac-rec} with initial parameters \texttt{k} and $1$,
+        The \texttt{cont-frac} procedure calls the \texttt{cont-frac-rec} procedure with initial parameters \texttt{k} and $1$,
         in this way we are sure that the number of iterations performed will be $k$ (the \texttt{counter} goes from $1$ to $k$).
         The code is shown below:
-\begin{lstlisting}[caption={Recursive procedure \texttt{cont-frac}},captionpos=b]
+\begin{lstlisting}[caption={Recursive \texttt{cont-frac} procedure},captionpos=b]
 (define (cont-frac n d k)
   (define (cont-frac-rec k counter) 
     (if (= counter k)
@@ -194,12 +194,12 @@ the approximation with average damping takes $ 13 $ steps.
         Then it has been tested by approximating $ 1 / \varphi \sim 0.6180 $. When $ k = 11 $ or grater, the approximation is
         accurate to 4 decimals places.
     \item[b.] Since the procedure defined before generates a recursive process, it has been rewritten in order to generate an iterative
-        process. The procedure \texttt{cont-frac-iter} defines the local procedure \texttt{iter} which takes in input the number of
+        process. The \texttt{cont-frac-iter} procedure defines the local procedure \texttt{iter} which takes in input the number of
         iterations to be performed (\texttt{k}) and partial result computed so far. The idea is to begin from the last fraction (i.e. 
         $ N_{k} / D_{k} $) and then proceed backward to compute all the other fractions. In particular, the idea is to compute
         the quantity $ D_{i - 1} + \frac{N_{i}}{Q_{i}} $ where $ Q_{i} $ is the amount computed so far.
         
-        The procedure \texttt{iter} is called with initial parameters \texttt{k} and $ Q_{k} = D_{k} $ and, after the first 
+        The \texttt{iter} procedure is called with initial parameters \texttt{k} and $ Q_{k} = D_{k} $ and, after the first 
         iteration, the computed value is $ Q_{k - 1} = D_{k - 1} + \frac{N_{k}}{D_{k}} $.
         In the last step (i.e. $ k = 1 $) the procedure returns the ration $ N_{1} / Q_{1} $ that is exaclty the continued fraction
         to be computed.
@@ -225,8 +225,8 @@ Write a program that uses your \texttt{cont-frac} procedure from Exercise 1.37 t
 \paragraph{Solution} 
 The two procedures \texttt{cont-frac} and \texttt{cont-frac-iter} were used to approximate $ e $. Both were used to verify the 
 correspondence of the results.
-The procedure \texttt{euler-number} uses the procedure \texttt{cont-frac} (which generates a recursive process), while the procedure 
-\texttt{euler-number-iter} uses the procedure \texttt{cont-frac-iter}.
+The \texttt{euler-number} procedure uses the \texttt{cont-frac} procedure (which generates a recursive process), while the 
+\texttt{euler-number-iter} procedure uses the \texttt{cont-frac-iter} procedure.
 To get the values of $ N_{k} $ and $ D_{k} $, two procedures have been defined: \texttt{get-n} and \texttt{get-d}. The first one
 is trivial and returns $ 1 $ at each iteration step, while the latter is more complex.
 To get the element of the sequence $ 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, \dots $ it is possible to use the function
