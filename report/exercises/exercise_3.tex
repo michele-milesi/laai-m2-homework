@@ -471,7 +471,7 @@ first occurence of success at the sixth trial.
 To check the formula, some samples have been generated in order to approximate the probability to get five consecutive 
 \textit{false} results. The experiment consists of generating $ 100000 $ samples with probability 
 $ P(true) = P(false) = 0.5 $.
-The following procedures are defined in order to implement the experiment: \textit{(i)} \texttt{model} is a wrapper for the 
+The following procedures are defined in order to implement the experiment: \textit{(i)} \texttt{geometric-model} is a wrapper for the 
 procedure \texttt{geometric}; \textit{(ii)} \texttt{count-5} takes in input the list of samples and returns the number of
 occurences which have value $ 5 $.
 Then the samples are generated and the statistics are computed.
@@ -481,7 +481,7 @@ Then the samples are generated and the statistics are computed.
 (define n-samples 100000)
 
 ; model used to generate the samples
-(define (model)
+(define (geometric-model)
   (define p 0.5)
   (geometric p))
 
@@ -494,7 +494,7 @@ Then the samples are generated and the statistics are computed.
           (count-5 (cdr l)))))
 
 ; sampling
-(define experiment (repeat model n-samples))
+(define experiment (repeat geometric-model n-samples))
 
 ; ratio between the number of samples with value 5
 ; and the total number of samples

@@ -12,7 +12,7 @@
 (define n-samples 100000)
 
 ; model used to generate the samples
-(define (model)
+(define (geometric-model)
   (define p 0.5)
   (geometric p))
 
@@ -25,7 +25,7 @@
           (count-5 (cdr l)))))
 
 ; sampling
-(define experiment (repeat model n-samples))
+(define experiment (repeat geometric-model n-samples))
 
 ; ratio between the number of samples with value 5
 ; and the total number of samples

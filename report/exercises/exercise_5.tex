@@ -111,11 +111,11 @@ The answers to the questions are written below:
 
 ; definition of a model which represents 
 ; the distribution given in the exercise
-(define (model)
+(define (multinomial-model)
   (multinomial x x-weights))
 
 ; visualization of the results
-(hist (repeat 10000 model))
+(hist (repeat 10000 multinomial-model))
         \end{lstlisting}
         Finally some samples are generated in order to show that the implemented distribution is equivalent to the distribution defined
         in Table~\ref{tab:casino-game}. The results are shown in Figure~\ref{fig:casino-game-d}.

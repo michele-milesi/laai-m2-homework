@@ -13,11 +13,11 @@
 ; (define x-weights '(5 0.5 4 0.5))
 
 ; definition of a model which represents the distribution given in the exercise
-(define (model)
+(define (multinomial-model)
   (multinomial x x-weights))
 
 ; visualization of the results
-(hist (repeat 10000 model))
+(hist (repeat 10000 multinomial-model))
 
 
 ; POINT E
