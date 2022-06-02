@@ -69,7 +69,7 @@ returns the value \texttt{0}, indeed, the interpreter evaluates the conditional 
 is substituted by the value \texttt{0}, the condition (i.e. \texttt{(= x 0)}) is true and the consequent (i.e. \texttt{0}) is returned.
 
 We can observe that the applicative-order evaluation can be useful when the computation of the arguments is heavy and the arguments are
-used many times in the body of the function. In this case some arguments can be evaluated even if they are not used in the body of the
+used many times in the body of the function. A drawback is that some arguments can be evaluated even if they are not used in the body of the
 procedure (e.g. because of conditional expressions) and this can cause, as in this particular case, some problems.
 Instead, normal-order evaluation can be useful when the arguments are used few times or not used, but if they are used many times 
-and their computation is heavy, then the performances are worse than applicative-order evaluation.
+and their computation is heavy, then the performances are worse than applicative-order evaluation ones.
